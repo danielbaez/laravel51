@@ -22,11 +22,21 @@ Route::post('auth/login', [
 	'uses' => 'Auth\AuthController@postLogin'
 ]);
 
+Route::get('auth/logout', [
+	'as' => 'logout',
+	'uses' => 'Auth\AuthController@getLogout'
+]);
+
 Route::group(['middleware' => 'auth'], function () {
     
 	Route::get('/', [
 	'as' => 'home',
-	'uses' => 'homeController@home'
+	'uses' => 'HomeController@home'
+	]);	
+
+	Route::get('/users', [
+	'as' => 'users',
+	'uses' => 'UserController@show'
 	]);	
 
 });

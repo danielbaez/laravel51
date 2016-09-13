@@ -131,7 +131,7 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ Auth::user()->name }} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
@@ -144,7 +144,7 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="{{ route('logout') }}"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>
                     </ul>
                 </li>
@@ -154,6 +154,9 @@
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
                         <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    </li>
+                    <li class="active">
+                        <a href="{{ route('users') }}"><i class="fa fa-fw fa-users"></i> Users</a>
                     </li>
                     <li>
                         <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
@@ -193,7 +196,7 @@
         </nav>
 
         <div id="page-wrapper">
-
+            @section('content')
             <div class="container-fluid">
 
                 <!-- Page Heading -->
@@ -466,7 +469,7 @@
 
             </div>
             <!-- /.container-fluid -->
-
+            @show
         </div>
         <!-- /#page-wrapper -->
 
