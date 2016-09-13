@@ -11,9 +11,14 @@ use App\User;
 
 class AccessController extends Controller
 {
-    public function login()
+    public function getLogin()
     {
     	$users = User::all();
     	return view('Auth.login', $users);
+    }
+
+    public function postLogin()
+    {
+    	dd('postt');
     }
 }

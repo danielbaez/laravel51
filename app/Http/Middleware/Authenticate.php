@@ -41,6 +41,11 @@ class Authenticate
                 return redirect()->guest('auth/login');
             }
         }
+        
+        /*if(auth()->user()->rol != 'admin'){
+            $message = 'Permiso denegado: Solo los administradores pueden entrar a esta sección';
+            return redirect()->route('home')->with('message', $message);
+        }*/
 
         return $next($request);
     }

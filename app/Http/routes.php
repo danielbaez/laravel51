@@ -11,4 +11,22 @@
 |
 */
 
-Route::get('/', "AccessController@login");
+
+Route::get('auth/login', [
+	'as' => 'login-get',
+	'uses' => 'Auth\AuthController@getLogin'
+	]);
+
+Route::post('auth/login', [
+	'as' => 'login-post',
+	'uses' => 'Auth\AuthController@postLogin'
+]);
+
+Route::group(['middleware' => 'auth'], function () {
+    
+	Route::get('/', [
+	'as' => 'home',
+	'uses' => 'homeController@home'
+	]);	
+
+});

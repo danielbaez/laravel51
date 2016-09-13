@@ -1,14 +1,16 @@
 @extends('Auth.template')
 @section('content')
 	<div class="container text-center page-login">
-		<img src="https://comparabien.com/apps/panel/public/images/logo.png" alt="">
+		<img class="logo" src="https://comparabien.com/apps/panel/public/images/logo.png" alt="">
 
 		<div class="row container-login">
-			<form class="form-horizontal">
+			@include('partials.errors')
+			<form class="form-horizontal" method="POST" action="{{ route('login-post') }}">
+				{!! csrf_field() !!}
 			    <div class="form-group">
 			      
 			      <div class="col-sm-12">
-			        <input type="email" name="email" class="form-control" placeholder="Ingrese su email">
+			        <input type="email" name="email" class="form-control" placeholder="Ingrese su email" value="{{ old('email') }}">
 			      </div>
 			    </div>
 			    <div class="form-group">
