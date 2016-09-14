@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
-    //
+	protected $connection = 'mysql2';
+    
+    protected $table = 'PE_COMPANIES';
 
-    public function user()
+	protected $fillable = ['id', 'name'];
+
+	public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->hasOne('App\User');
     }
 }

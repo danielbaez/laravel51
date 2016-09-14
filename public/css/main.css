@@ -32,6 +32,8 @@ body {
   list-style: none
 }
 
+
+
 @media(max-width:320px){
   .page-login {
     width:  85%;
@@ -49,13 +51,23 @@ body {
 }
 /* Small Devices, Tablets */
 @media only screen and (min-width : 768px) {
-    
+    .btn-option {
+      display: inline-block;
+      margin-bottom: 8px
+    }
 }
 /* Medium Devices, Desktops */
 @media only screen and (min-width : 992px) {
-    
+    .btn-option {
+      display: block;
+      margin-bottom: 8px
+    }
 }
 /* Large Devices, Wide Screens */
 @media only screen and (min-width : 1200px) {
+  .btn-option {
+    display: inline-block;
+  margin: 0px
+}
 
 }

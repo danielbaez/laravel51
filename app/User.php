@@ -40,6 +40,13 @@ class User extends Model implements AuthenticatableContract,
 
     public function company()
     {
-        return $this->hasOne('App\Company');
+        return $this->belongsTo('App\Company', 'company_id', 'CO_COMPANY_ID');
+        //return $this->belongsTo('App\Company');
+        
+        //return $this->belongsTo('App\Company', 'company_id', 'id');
+        //modelo Company, foreign_key de la tabla Users, primary_key de la tabla Company  
+        //segundo parametro:necesario cuando el foreign_key de la tabla Users es diferente a company_id, ya que toma por defecto
+        //tercer parametro:necesario cuando el primary_key de la tabla Company es diferente a id, ya que toma por defecto
+
     }
 }
