@@ -198,9 +198,9 @@
         </nav>
 
         <div id="page-wrapper">
-            @section('content')
+            
             <div class="container-fluid">
-
+            @section('content')
                 <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">
@@ -468,10 +468,10 @@
                     </div>
                 </div>
                 <!-- /.row -->
-
+            @show
             </div>
             <!-- /.container-fluid -->
-            @show
+            
         </div>
         <!-- /#page-wrapper -->
 

@@ -20,6 +20,12 @@
 			      </div>
 			    </div>
 			    <div class="form-group">
+			      
+			      <div class="col-sm-12">
+			        <input type="checkbox" name="remember"> Remember Me
+			      </div>
+			    </div>
+			    <div class="form-group">
 			      <div class="col-sm-12">
 			        <button type="submit" class="btn btn-primary">Ingresar</button>
 			      </div>

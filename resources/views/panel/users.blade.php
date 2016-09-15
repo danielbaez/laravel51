@@ -1,12 +1,20 @@
 @extends('panel.template')
 
 @section('content')
-	<h1>Usuarios</h1><h4>{{ $users->count() }} de {{ $users->total() }}</h4>
+	<div class="row">
+		<div class="col col-xs-6">
+			<h1>Usuarios</h1><h4>{{ $users->count() }} de {{ $users->total() }}</h4>
+		</div>
+		<div class="col col-xs-6 text-right">
+			<button class="btn btn-primary" style="margin:30px 0px 10px 0px">Agregar <i class="fa fa-plus"></i></button>
+		</div>
+	</div>
+	
 
 	<div class="table-responsive">
 	  <table class="table table-striped">
 	  	<thead>
-	  	  <tr><th>#</th><th>Nombres</th><th>Email</th><th>Empresa</th><th>Acciones</th></tr>
+	  	  <tr><th class="text-center">#</th><th class="text-center">Nombres</th><th class="text-center">Email</th><th class="text-center">Empresa</th><th class="text-center">Acciones</th></tr>
 	  	</thead>
 	  	<tbody>
 	  		@foreach($users as $user)
@@ -17,16 +25,8 @@
 	  	  		Comparabien
 	  	  	@endif
 	  	  	</td>
-	  	  	<td>
-	  	  		<!-- <button class="btn btn-primary btn-option">Editar</button> <button class="btn btn-danger btn-option">Eliminar</button> -->
-	  	  		<div class="btn-group hidden-xs">
-    <button class="btn btn-default">View</button>
-    <button class="btn btn-default">Delete</button>
-</div>
-<div class="btn-group-vertical visible-xs">
-    <button class="btn btn-default">View</button>
-    <button class="btn btn-default">Delete</button>
-</div>
+	  	  	<td class="text-center">
+	  	  		<button class="btn btn-primary btn-option">Editar</button> <button class="btn btn-danger btn-option">Eliminar</button>
 	  	  	</td>
 	  	  	</tr>
 	  		@endforeach
