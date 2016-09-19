@@ -10,7 +10,7 @@ class Company extends Model
     
     protected $table = 'PE_COMPANIES';
 
-	protected $fillable = ['id', 'name'];
+	protected $fillable = ['CO_COMPANY_ID', 'CO_NAME'];
 
 	public function user()
     {

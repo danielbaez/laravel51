@@ -34,9 +34,6 @@ Route::group(['middleware' => 'auth'], function () {
 	'uses' => 'HomeController@home'
 	]);	
 
-	Route::get('/users', [
-	'as' => 'users',
-	'uses' => 'UserController@show'
-	]);	
+	Route::resource('user', 'UserController');
 
 });

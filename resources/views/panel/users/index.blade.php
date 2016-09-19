@@ -1,12 +1,13 @@
 @extends('panel.template')
 
 @section('content')
+	@include('partials.messages')
 	<div class="row">
 		<div class="col col-xs-6">
 			<h1>Usuarios</h1><h4>{{ $users->count() }} de {{ $users->total() }}</h4>
 		</div>
 		<div class="col col-xs-6 text-right">
-			<button class="btn btn-primary" style="margin:30px 0px 10px 0px">Agregar <i class="fa fa-plus"></i></button>
+			<a href="{{ route('user.create') }}" class="btn btn-primary" style="margin:30px 0px 10px 0px">Agregar <i class="fa fa-plus"></i></a>
 		</div>
 	</div>
 	
