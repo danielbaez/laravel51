@@ -10,7 +10,7 @@
 			<a href="{{ route('user.create') }}" class="btn btn-primary" style="margin:30px 0px 10px 0px">Agregar <i class="fa fa-plus"></i></a>
 		</div>
 	</div>
-	
+
 
 	<div class="table-responsive">
 	  <table class="table table-striped">
@@ -27,7 +27,12 @@
 	  	  	@endif
 	  	  	</td>
 	  	  	<td class="text-center">
-	  	  		<button class="btn btn-primary btn-option">Editar</button> <button class="btn btn-danger btn-option">Eliminar</button>
+	  	  		{!! Form::open(['route' => ['user.destroy', $user], 'class' => 'formDelete']) !!}
+		  	  		<a class="btn btn-primary btn-option" href="{{ route('user.edit', $user) }}">Editar</a> 
+		  	  		<input type="hidden" name="_method" value="DELETE">
+		  	  		<button class="btn btn-danger btn-option" onClick="return confirm('Eliminar registro?')">Eliminar</button>
+	  	  		{!! Form::close() !!}
+
 	  	  	</td>
 	  	  	</tr>
 	  		@endforeach

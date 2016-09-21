@@ -47,6 +47,54 @@ class Authenticate
             return redirect()->route('home')->with('message', $message);
         }*/
 
+        if($this->auth->check() && $this->auth->user()->active !== 1){
+            $this->auth->logout();
+            //return redirect('auth/login')->withErrors('Su cuenta de usuario está desacticada');
+            return redirect()->route('login-get')->withErrors('Su cuenta de usuario está desacticada');
+        }
+
+        \Session::forget('menu');
+        \Session::put('country', $this->auth->user()->country);
+        switch (\Session::get('country')) {
+            case 'pe':
+                \Session::put('country_desc', 'Perú');
+                break;
+            case 'mx':
+            default:
+                \Session::put('country_desc', 'México');
+                break;
+            case 'co':
+            default:
+                \Session::put('country_desc', 'Colombia');
+                break;
+        }
+        
+        if($this->auth->user()->type == 1){
+            \Session::push('menu', (object)array('title'=>'Dashboard', 'route'=>'home', 'path' => '/', 'icon'=>'fa-dashboard')); 
+            \Session::push('menu', (object)array('title'=>'Usuarios','route'=>'user.index', 'path' => 'user', 'icon'=>'fa-users'));
+
+            \Session::push('menu', (object)array('title'=>'Llamadas','route'=>'calls', 'path' => 'calls', 'icon'=>'fa-phone')); 
+        }
+        if($this->auth->user()->type == 3){
+            \Session::push('menu', (object)array('title'=>'Dashboard', 'route'=>'home', 'path' => '/', 'icon'=>'fa-dashboard'));  
+        }
+        if($this->auth->user()->type == 2){
+            \Session::push('menu', (object)array('title'=>'Dashboard', 'route'=>'home', 'path' => '/', 'icon'=>'fa-dashboard'));
+        }
+  
+        $i = 0;
+        foreach(\Session::get('menu') as $struct) {
+            if ($request->route()->getPath() == $struct->path) {
+                $i++;
+                break;
+            }
+        }
+        if($i == 0)
+        {
+            $message = 'Permiso denegado: Solo los administradores pueden entrar a esa sección';
+            return redirect()->route('home')->with('message', $message);
+        }
+
         return $next($request);
     }
 }

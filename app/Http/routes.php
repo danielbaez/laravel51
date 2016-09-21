@@ -11,6 +11,10 @@
 |
 */
 
+// User dependency injection
+Route::bind('user', function($user){
+    return App\User::find($user);
+});
 
 Route::get('auth/login', [
 	'as' => 'login-get',
@@ -35,5 +39,11 @@ Route::group(['middleware' => 'auth'], function () {
 	]);	
 
 	Route::resource('user', 'UserController');
+
+	Route::get('/calls', [
+	'as' => 'calls',
+	'uses' => 'CallController@index'
+	]);
+
 
 });

@@ -47,7 +47,7 @@ class UserController extends Controller
         $this->validate($request, [
             'name'      => 'required|max:100',
             'email'     => 'required|email',
-            'password'  => 'required|confirmed',
+            'password'  => ($request->get('password') != "") ? 'required|confirmed' : "",
             'type'      => 'required|in:1,2,3',
             'country'      => 'required|in:pe,mx',
             'company_id'  => ($request->get('type') == 3) ? 'required' : "",
@@ -88,9 +88,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        $companies = Company::orderBy('CO_COMPANY_ID', 'desc')->lists('CO_NAME', 'CO_COMPANY_ID');
+        return view('panel.users.edit', compact('user', 'companies'));
     }
 
     /**
@@ -100,9 +101,35 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $this->validate($request, [
+            'name'      => 'required|max:100',
+            'email'     => 'required|email',
+            'password'  => ($request->get('password') != "") ? 'required|confirmed' : "",
+            'type'      => 'required|in:1,2,3',
+            'country'      => 'required|in:pe,mx',
+            'company_id'  => ($request->get('type') == 3) ? 'required' : "",
+        ]);
+      
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        if($request->get('password') != ""){
+            $user->password = \Hash::make($request->get('password'));
+        }
+        $user->type = $request->get('type');
+        $user->country = $request->get('country');
+        $user->company_id = ($request->get('type') == 3) ? $request->get('company_id') : 0;
+        $user->active = $request->has('active') ? 1 : 0;
+        $user->method_call = ($request->get('type') != 3) ? $request->get('method_call') : '';
+        $user->phone_pe = ($request->get('type') != 3) ? $request->get('phone_pe') : '';
+        $user->phone_mx = ($request->get('type') != 3) ? $request->get('phone_mx') : '';
+        
+        $updated = $user->save();
+        
+        $message = $updated ? 'Usuario actualizado correctamente!' : 'El Usuario NO pudo actualizarse!';
+        
+        return redirect()->route('user.index')->with('message', $message);
     }
 
     /**
@@ -111,8 +138,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $deleted = $user->delete();
+        
+        $message = $deleted ? 'Usuario eliminado correctamente!' : 'El Usuario NO pudo eliminarse!';
+        
+        return redirect()->route('user.index')->with('message', $message);
     }
 }

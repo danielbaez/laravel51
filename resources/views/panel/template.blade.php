@@ -133,6 +133,16 @@
                     </ul>
                 </li>
                 <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-flag"></i> {{ Session::get('country_desc') }} <b class="caret"></b></a>
+                    <ul class="dropdown-menu alert-dropdown">
+                        <li>
+                            <a href="#">Perú <span class="label label-default">Alert Badge</span></a>
+                            <a href="#">México <span class="label label-default">Alert Badge</span></a>
+                            <a href="#">Colombia <span class="label label-default">Alert Badge</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ Auth::user()->name }} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
@@ -154,11 +164,16 @@
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    <li class="active">
+
+                    @foreach(Session::get('menu') as $item)
+                        <li {{ (Request::is($item->path) ? 'class=active' : '') }}>
+                            <a href="{{ route($item->route) }}"><i class="fa fa-fw {{$item->icon}}"></i> {{ $item->title }}</a>
+                            
+                        </li>
+                    @endforeach
+
+                    <!-- <li class="active">
                         <a href="{{ route('home') }}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
-                    </li>
-                    <li class="active">
-                        <a href="{{ route('user.index') }}"><i class="fa fa-fw fa-users"></i> Users</a>
                     </li>
                     <li>
                         <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
@@ -191,7 +206,7 @@
                     </li>
                     <li>
                         <a href="index-rtl.html"><i class="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -201,6 +216,8 @@
             
             <div class="container-fluid">
             @section('content')
+
+                @include('partials.messages')
                 <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">

@@ -32,7 +32,11 @@ body {
   list-style: none
 }
 
-#companiesForm {
+.showCont {
+  display: block
+}
+
+.hideCont {
   display: none
 }
 
@@ -40,6 +44,14 @@ body {
   max-width: 100%;
   margin: 15px auto;
 
+}
+
+.formDelete {
+  display: inline-block;
+}
+
+#companiesForm {
+  display: none
 }
 
 @media(max-width:320px){
