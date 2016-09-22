@@ -14,7 +14,9 @@ class CallController extends Controller
 {
     public function index()
     {
-    	dd(Call::all()->first());
-    	return view('panel.calls.index');
+    	//dd(Call::all()->first());
+    	
+    	$calls = Call::getCalls();
+    	return view('panel.calls.index', compact('calls'));
     }
 }

@@ -65,12 +65,25 @@ return [
             'strict'    => false,
         ],
 
-        'mysql2' => [
+        'remote_pe' => [
             'driver'    => 'mysql',
             'host'      => env('DB_HOST2', 'localhost'),
             'database'  => env('DB_DATABASE2', 'forge'),
             'username'  => env('DB_USERNAME2', 'forge'),
             'password'  => env('DB_PASSWORD2', ''),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'unix_socket' => '/Applications/MAMP/tmp/mysql/mysql.sock',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
+
+        'remote_mx' => [
+            'driver'    => 'mysql',
+            'host'      => env('DB_HOST3', 'localhost'),
+            'database'  => env('DB_DATABASE3', 'forge'),
+            'username'  => env('DB_USERNAME3', 'forge'),
+            'password'  => env('DB_PASSWORD3', ''),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'unix_socket' => '/Applications/MAMP/tmp/mysql/mysql.sock',
