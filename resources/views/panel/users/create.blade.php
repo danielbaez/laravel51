@@ -10,7 +10,7 @@
 	<div class="row containter-form-user">
 		@include('partials.errors')
 
-		{!! Form::open(['route'=>'user.store']) !!}
+		{!! Form::open(['route'=>'admin.user.store']) !!}
             <div class='col-md-6'>
                 <div class="form-group">
                     <label for="name">Nombres:</label>

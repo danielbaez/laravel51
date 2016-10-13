@@ -31,19 +31,16 @@ Route::get('auth/logout', [
 	'uses' => 'Auth\AuthController@getLogout'
 ]);
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth', 'no-cache'], 'prefix'=>'admin'], function () {
     
-	Route::get('/', [
-	'as' => 'home',
-	'uses' => 'HomeController@home'
-	]);	
+	Route::get('/', ['as' => 'home','uses' => 'HomeController@home']);	
 
-	Route::resource('user', 'UserController');
+	Route::group( ['middleware' => ['administrador']], function() {
+		Route::resource('user', 'UserController');	
+	});
 
-	Route::get('/calls', [
-	'as' => 'calls',
-	'uses' => 'CallController@index'
-	]);
-
+	Route::group( ['middleware' => ['agente']], function() {
+		Route::get('/calls', ['as' => 'calls', 'uses' => 'CallController@index']);
+	});
 
 });

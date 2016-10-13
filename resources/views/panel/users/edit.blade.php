@@ -9,7 +9,7 @@
 
 	<div class="row containter-form-user">
 		@include('partials.errors')
-        {!! Form::model($user, array('route' => array('user.update', $user))) !!}
+        {!! Form::model($user, array('route' => array('admin.user.update', $user))) !!}
             <input type="hidden" name="_method" value="PUT">
             <div class='col-md-6'>
                 <div class="form-group">

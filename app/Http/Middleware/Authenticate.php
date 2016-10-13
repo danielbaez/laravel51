@@ -42,11 +42,6 @@ class Authenticate
             }
         }
         
-        /*if(auth()->user()->rol != 'admin'){
-            $message = 'Permiso denegado: Solo los administradores pueden entrar a esta sección';
-            return redirect()->route('home')->with('message', $message);
-        }*/
-
         if($this->auth->check() && $this->auth->user()->active !== 1){
             $this->auth->logout();
             //return redirect('auth/login')->withErrors('Su cuenta de usuario está desacticada');
@@ -70,29 +65,16 @@ class Authenticate
         }
         
         if($this->auth->user()->type == 1){
-            \Session::push('menu', (object)array('title'=>'Dashboard', 'route'=>'home', 'path' => '/', 'icon'=>'fa-dashboard')); 
-            \Session::push('menu', (object)array('title'=>'Usuarios','route'=>'user.index', 'path' => 'user', 'icon'=>'fa-users'));
+            \Session::push('menu', (object)array('title'=>'Dashboard', 'route'=>'home', 'path' => 'admin', 'icon'=>'fa-dashboard')); 
+            \Session::push('menu', (object)array('title'=>'Usuarios','route'=>'admin.user.index', 'path' => 'admin/user', 'icon'=>'fa-users'));
 
-            \Session::push('menu', (object)array('title'=>'Llamadas','route'=>'calls', 'path' => 'calls', 'icon'=>'fa-phone')); 
+            \Session::push('menu', (object)array('title'=>'Llamadas','route'=>'calls', 'path' => 'admin/calls', 'icon'=>'fa-phone')); 
         }
         if($this->auth->user()->type == 3){
-            \Session::push('menu', (object)array('title'=>'Dashboard', 'route'=>'home', 'path' => '/', 'icon'=>'fa-dashboard'));  
+            \Session::push('menu', (object)array('title'=>'Dashboard', 'route'=>'home', 'path' => 'admin', 'icon'=>'fa-dashboard'));  
         }
         if($this->auth->user()->type == 2){
-            \Session::push('menu', (object)array('title'=>'Dashboard', 'route'=>'home', 'path' => '/', 'icon'=>'fa-dashboard'));
-        }
-  
-        $i = 0;
-        foreach(\Session::get('menu') as $struct) {
-            if ($request->route()->getPath() == $struct->path) {
-                $i++;
-                break;
-            }
-        }
-        if($i == 0)
-        {
-            $message = 'Permiso denegado: Solo los administradores pueden entrar a esa sección';
-            return redirect()->route('home')->with('message', $message);
+            \Session::push('menu', (object)array('title'=>'Dashboard', 'route'=>'home', 'path' => 'admin', 'icon'=>'fa-dashboard'));
         }
 
         return $next($request);

@@ -68,7 +68,7 @@ class UserController extends Controller
         
         $message = $user ? 'Usuario agregado correctamente!' : 'El usuario NO pudo agregarse!';
         
-        return redirect()->route('user.index')->with('message', $message);
+        return redirect()->route('admin.user.index')->with('message', $message);
     }
 
     /**
@@ -129,7 +129,7 @@ class UserController extends Controller
         
         $message = $updated ? 'Usuario actualizado correctamente!' : 'El Usuario NO pudo actualizarse!';
         
-        return redirect()->route('user.index')->with('message', $message);
+        return redirect()->route('admin.user.index')->with('message', $message);
     }
 
     /**

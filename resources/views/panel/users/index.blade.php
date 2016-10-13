@@ -7,7 +7,7 @@
 			<h1>Usuarios</h1><h4>{{ $users->count() }} de {{ $users->total() }}</h4>
 		</div>
 		<div class="col col-xs-6 text-right">
-			<a href="{{ route('user.create') }}" class="btn btn-primary" style="margin:30px 0px 10px 0px">Agregar <i class="fa fa-plus"></i></a>
+			<a href="{{ route('admin.user.create') }}" class="btn btn-primary" style="margin:30px 0px 10px 0px">Agregar <i class="fa fa-plus"></i></a>
 		</div>
 	</div>
 
@@ -27,8 +27,8 @@
 	  	  	@endif
 	  	  	</td>
 	  	  	<td class="text-center">
-	  	  		{!! Form::open(['route' => ['user.destroy', $user], 'class' => 'formDelete']) !!}
-		  	  		<a class="btn btn-primary btn-option" href="{{ route('user.edit', $user) }}">Editar</a> 
+	  	  		{!! Form::open(['route' => ['admin.user.destroy', $user], 'class' => 'formDelete']) !!}
+		  	  		<a class="btn btn-primary btn-option" href="{{ route('admin.user.edit', $user) }}">Editar</a> 
 		  	  		<input type="hidden" name="_method" value="DELETE">
 		  	  		<button class="btn btn-danger btn-option" onClick="return confirm('Eliminar registro?')">Eliminar</button>
 	  	  		{!! Form::close() !!}

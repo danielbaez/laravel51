@@ -1,11 +1,11 @@
-@extends('Auth.template')
+@extends('auth.template')
 @section('content')
 	<div class="container text-center page-login">
 		<img class="logo" src="https://comparabien.com/apps/panel/public/images/logo.png" alt="">
 
 		<div class="row container-login">
 			@include('partials.errors')
-			<form class="form-horizontal" method="POST" action="{{ route('login-post') }}">
+			<form class="form-horizontal" method="POST" action="{{ route('login-post') }}" novalidate>
 				{!! csrf_field() !!}
 			    <div class="form-group">
 			      
