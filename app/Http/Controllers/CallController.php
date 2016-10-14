@@ -19,4 +19,20 @@ class CallController extends Controller
     	$calls = Call::getCalls();
     	return view('panel.calls.index', compact('calls'));
     }
+
+    public function operation(Request $request)
+    {
+    	$idOperation = $request->get('operacion');
+    	switch ($idOperation) {
+    		case 1:
+    			return json_encode(array('success'=>$idOperation));
+    			break;
+    		
+    		default:
+    			# code...
+    			break;
+    	}
+    	//dd($request);
+    	return json_encode(array('success'=>true));
+    }
 }
