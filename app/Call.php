@@ -30,7 +30,7 @@ class Call extends Model
 		/*$company = Company::getCompany(1);
 		print_r($company);*/
 
-		$calls = Call::orderBy('id','DESC')->get();
+		$calls = Call::where('request', '<>', '')->orderBy('id','DESC')->limit(1000)->get();
 		/*foreach ($calls as $k => $c) {
 			$company = Company::getCompany($c->ci);
 			$c->cn = '';
@@ -51,12 +51,15 @@ class Call extends Model
 				{
 					if($c->request['cover'] == 'Total,Parcial')
 					{
-						$c->request['cover'] = 'Completa';
+						//$c->request['cover'] = 'Completa';
+						$rnmCover = 'Completa';
 					}
 					if($c->request['cover'] == 'Total')
 					{
-						$c->request['cover'] = 'Perdida Total';
+						//$c->request['cover'] = 'Perdida Total';
+						$rnmCover = 'Perdida Total';
 					}
+					array_merge($c->request, array('cover'=>'Completa'));
 					$compare = 'https://comparabien.com.pe/seguros-vehiculares/result?';
 					$cobertura = '';
 				}
