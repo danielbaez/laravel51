@@ -4,10 +4,18 @@
 	<div style="display:none">{{ date_default_timezone_set('America/Lima') }}</div>
 	@include('partials.messages')
 	<div class="row">
-		<h4>Calls Comparison</h4>
-		<br>
+		<div style="display: none" class="alert alert-info alert-dismissible text-center" role="alert" id="msgOperationDiv">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<h4><strong><i class="fa fa-info-circle"></i></strong> <span id="msgOperation"></span></h4>
+		</div>
+		
+		<div class="col-xs-12" style="margin-bottom: 20px">
+			<h4 style="font-weight: bold">Registros de comparaciones</h4>
+		</div>
 		<div class="col hidden-xs col-sm-3 text-center">
-			<p style="padding-top:6px"><strong>Busqueda por Nombre o email:</strong></p>
+			<p style="padding-top:6px"><strong>Busqueda por Nombre o Email:</strong></p>
 		</div>
 		<div class="col col-xs-8 col-sm-6 text-center">
 			<input class="form-control" type="text" placeholder="Ingrese nombre o email">
@@ -26,7 +34,7 @@
 	  	<tbody>
 	  		@foreach($calls as $c)
 	  			<?php $request = ($c->request); ?>
-	  			<tr class="aaa"><td>{{ $c->id }}</td><td>{{ $c->name }}<br>{{ $c->e }}</td><td>{{ date('d-m-Y h:i A', $c->time) }}</td><td><input class="form-control" type="input" value="{{ $c->phone }}"></td><td class="text-center">{{ $request['carname'] }}<br>({{ $request['year'] }})<br><a href="{{ $c->compare }}" target="_blank">Resultados</a></td><td><button class="btn btn-success">Llamar</button></td><td>{{ $c->prima }}</td><td>{{ $c->company }}</td><td><a class="btn btn-warning btn-actualizar">Actualizar</a></td></tr>
+	  			<tr data-idcall="{{ $c->id }}"><td>{{ $c->id }}</td><td>{{ $c->name }}<br>{{ $c->e }}</td><td>{{ date('d-m-Y h:i A', $c->time) }}</td><td><input class="form-control" type="input" value="{{ $c->phone }}"></td><td class="text-center">{{ $request['carname'] }}<br>({{ $request['year'] }})<br><a href="{{ $c->compare }}" target="_blank">Resultados</a></td><td><button class="btn btn-success">Llamar</button></td><td>{{ $c->prima }}</td><td>{{ $c->company }}</td><td><a class="btn btn-warning btn-actualizar">Actualizar</a></td></tr>
 	  		@endforeach
 	  	</tbody>
 	  	<tbody>
@@ -58,6 +66,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <form id="form-operations" action="{{route('calls-operation')}}" method="POST">
     	{!! csrf_field() !!}
+    	<input type="hidden" name="idCall" id="idCall">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

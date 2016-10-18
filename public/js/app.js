@@ -1,17 +1,21 @@
 $( document ).ready(function() {
     
-	$('input[type=radio][name=type]').change(function() {
+  $('input[type=radio][name=type]').change(function() {
     if (this.value == '3') {
-    	$('#companiesForm').show();
-    	$('.byType2').hide();
+      $('#companiesForm').show();
+      $('.byType2').hide();
     }
     else{
-    	$('#companiesForm').hide();
-    	$('.byType2').show();
+      $('#companiesForm').hide();
+      $('.byType2').show();
     }
   });
 
   $('.btn-actualizar').on('click', function() {
+
+     var idCall = $(this).closest("tr").data('idcall');
+     $("#idCall").val(idCall);
+
     $("#select-operaciones option[value='']").prop('selected',true);
     $("#select-motivo option[value='']").prop('selected',true);
     $('.div-fecha').hide();
@@ -26,6 +30,7 @@ $( document ).ready(function() {
     $('.div-nrocuotas').hide();
     $('.btn-guardar-operacion').prop( "disabled", true);    
     $('#myModal').modal();  
+    $('#msgOperationDiv').hide();
   });
 
   $('#select-operaciones').on('change', function() {
@@ -105,7 +110,7 @@ $( document ).ready(function() {
   });
 
   $('.btn-guardar-operacion').on('click', function() {
-    console.log($(this).closest('tr').find('.aaa').text());
+    
     var form = $('#form-operations');
     var url = form.attr('action');
     console.log(form.serialize());
@@ -118,6 +123,9 @@ $( document ).ready(function() {
     })
     .done(function(data){
       console.log(data);
+      $('#msgOperationDiv').show();
+      $('#msgOperation').html('La operación se ha realizado con éxito!');
+      $('#myModal').modal('hide');
     })
   });
 
