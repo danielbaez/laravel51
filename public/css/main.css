@@ -96,3 +96,7 @@ body {
 }
 
 }
+
+input.form-control.input-tel {
+  width: auto
+}

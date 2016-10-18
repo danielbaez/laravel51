@@ -4,18 +4,10 @@
 	<div style="display:none">{{ date_default_timezone_set('America/Lima') }}</div>
 	@include('partials.messages')
 	<div class="row">
-		<div style="display: none" class="alert alert-info alert-dismissible text-center" role="alert" id="msgOperationDiv">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-			<h4><strong><i class="fa fa-info-circle"></i></strong> <span id="msgOperation"></span></h4>
-		</div>
-		
-		<div class="col-xs-12" style="margin-bottom: 20px">
-			<h4 style="font-weight: bold">Registros de comparaciones</h4>
-		</div>
+		<h4>Calls Comparison</h4>
+		<br>
 		<div class="col hidden-xs col-sm-3 text-center">
-			<p style="padding-top:6px"><strong>Busqueda por Nombre o Email:</strong></p>
+			<p style="padding-top:6px"><strong>Busqueda por Nombre o email:</strong></p>
 		</div>
 		<div class="col col-xs-8 col-sm-6 text-center">
 			<input class="form-control" type="text" placeholder="Ingrese nombre o email">
@@ -29,12 +21,50 @@
 	<div class="table-responsive">
 	  <table class="table table-striped table-hover">
 	  	<thead>
-	  	  <tr><th class="text-center">ID</th><th class="text-center">Name - Email</th><th class="text-center">Fecha</th><th class="text-center">Phone</th><th class="text-center">Solicitar</th><th class="text-center">Call</th><th class="text-center">Prima</th><th class="text-center">Compañia</th><th class="text-center">Update</th></tr>
+	  	  <tr><th class="text-center">ID</th><th class="text-center">Name / Email</th><th class="text-center">Fecha</th><th class="text-center">Celular</th><th class="text-center">Solicitar</th><th class="text-center">Llamar</th><th class="text-center">Prima</th><th class="text-center">Compañia</th><th class="text-center">Operación</th></tr>
 	  	</thead>
 	  	<tbody>
 	  		@foreach($calls as $c)
 	  			<?php $request = ($c->request); ?>
-	  			<tr data-idcall="{{ $c->id }}"><td>{{ $c->id }}</td><td>{{ $c->name }}<br>{{ $c->e }}</td><td>{{ date('d-m-Y h:i A', $c->time) }}</td><td><input class="form-control" type="input" value="{{ $c->phone }}"></td><td class="text-center">{{ $request['carname'] }}<br>({{ $request['year'] }})<br><a href="{{ $c->compare }}" target="_blank">Resultados</a></td><td><button class="btn btn-success">Llamar</button></td><td>{{ $c->prima }}</td><td>{{ $c->company }}</td><td><a class="btn btn-warning btn-actualizar">Actualizar</a></td></tr>
+	  			<tr>
+	  				<td class="text-center">
+	  					{{ $c->id }}
+	  					<?php if($c->cant > 1){
+	  					?>
+	  						<button class="btn moreEntranceClient" style="color:white;background:teal; font-size:15px" data-more="{{$c->id}}" data-email="{{$c->e}}">{{$c->cant}} <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+	  					<?php
+	  					}
+	  					?>
+	  				</td>
+	  				<td>{{ $c->name }}<br>{{ $c->e }}</td>
+	  				<td>{{ date('d-m-Y h:i A', $c->time) }}</td>
+	  				<td><input class="form-control input-tel" type="input" value="{{ $c->phone }}"></td>
+	  				<td class="text-center">
+	  					<?php 
+	  						$carname = '';
+			  				if(isset($c->request['carname']))
+							{
+								$carname = $c->request['carname'];
+							}
+							if(isset($c->request['year']))
+							{
+								$carname.= ' ('.$c->request['year'].')';
+							}
+							if(strlen($carname)>0){
+							?>
+							<?php echo $carname; ?>
+							<?php
+							}
+				  			?>
+			  			<?php if(isset($c->compare) and strlen($c->compare) > 0){ ?>
+							<br><a href="{{$c->compare}}" target="_blank">Resultados</a>
+						<?php } ?>
+					</td>
+	  				<td class="text-center"><button class="btn btn-success"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></button></td>
+	  				<td>{{ $c->prima }}</td>
+	  				<td>{{ $c->company }}</td>
+	  				<td class="text-center"><a class="btn btn-warning btn-actualizar"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a></td>
+	  			</tr>
 	  		@endforeach
 	  	</tbody>
 	  	<tbody>
@@ -62,11 +92,15 @@
   </div>
 </div> -->
 
+
+<div class="text-center">
+	{!! $calls->render() !!}
+</div>
+
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="myModal">
   <div class="modal-dialog modal-lg" role="document">
     <form id="form-operations" action="{{route('calls-operation')}}" method="POST">
     	{!! csrf_field() !!}
-    	<input type="hidden" name="idCall" id="idCall">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
