@@ -135,4 +135,133 @@ $( document ).ready(function() {
     ignoreReadonly: true
   });
 
+  $(document).on('click', '.entriesMoreClient', function(even) {
+    even.preventDefault();
+    var inst = $(this);
+    var email = $(this).data('email');
+    var id = $(this).data('id');
+    var other = $("tr.showMoreEntriesClient").data('idcall');
+    if(other != id){
+      $("tr[data-idParent='"+other+"']").remove();
+      $("tr.showMoreEntriesClient").css('border-left','none');
+      $("tr.showMoreEntriesClient").find('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+      $("tr.showMoreEntriesClient").removeClass('showMoreEntriesClient');
+    }
+    if(inst.find('i').hasClass('fa-arrow-down')){
+
+      inst.closest("tr").addClass('showMoreEntriesClient');
+      inst.find('i').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+      var url = 'calls/ajax';
+      $.ajax({
+        data: {email: email, id:id, action:'entriesMoreClient'},
+        type: "GET",
+        dataType: "json",
+        url: url,
+      })
+      .done(function(data){
+        if(data.success){
+          var result = data.result;
+          for(var i = 0; i < result.length; i++){
+            var html = '';
+            var carname = '';
+            if(result[i].request['carname'])
+            {
+              carname = result[i].request['carname'];
+            }
+            if(result[i].request['year'])
+            {
+              carname += "("+result[i].request['year']+")";
+            }
+            if(result[i].compare && result[i].compare.length > 0){
+              carname += "<br><a href='"+result[i].compare+"' target='_blank'>Resultados</a>";
+            } 
+
+            html = "<tr style='border-left: 12px solid dodgerblue;' data-idParent="+id+"><td class='text-center'>"+result[i].id+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+result[i].time+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button></td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar disabled'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
+
+            inst.closest("tr").after(html);
+            inst.closest("tr").css('border-left','20px solid green');
+          } 
+
+            
+        }
+        
+      })
+    }
+    else{
+      $("tr[data-idParent='"+id+"']").remove();
+      inst.closest("tr").css('border-left','none');
+      inst.find('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+      inst.closest("tr").removeClass('showMoreEntriesClient');
+    }
+  });
+
+  $('.btn-search').on('click', function() {
+    var search = $('input[name="search"]').val();
+    //var url = 'calls/ajax';
+    var url = 'calls';
+    $.ajax({
+      data: {search: search, action:'searchCall'},
+      type: "GET",
+      dataType: "json",
+      url: url,
+    })
+    .done(function(response){
+      $('.table-calls-search tbody').html('');
+      $('.table-calls').hide();
+      $('.paginator-calls').hide();
+      $('.table-calls-search').show();
+
+      if(response.data){
+        console.log(response);
+        var result = response.data;
+        for(var i = 0; i < result.length; i++){
+          var html = '';
+          var carname = '';
+          if(result[i].request['carname'])
+          {
+            carname = result[i].request['carname'];
+          }
+          if(result[i].request['year'])
+          {
+            carname += "("+result[i].request['year']+")";
+          }
+          if(result[i].compare && result[i].compare.length > 0){
+            carname += "<br><a href='"+result[i].compare+"' target='_blank'>Resultados</a>";
+          } 
+          var moreCalls = '';
+          if(result[i].cant > 1){
+            moreCalls = '<button class="btn entriesMoreClient" style="color:white;background:teal; font-size:15px" data-id='+result[i].id+' data-email="'+result[i].e+'"">'+result[i].cant+' <i class="fa fa-arrow-down" aria-hidden="true"></i></button>';
+          }
+
+          html = "<tr data-idcall="+result[i].id+"><td class='text-center'>"+result[i].id+' '+moreCalls+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+result[i].time+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button></td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
+
+          $('.table-calls-search tbody:last-child').append(html);
+        }  
+
+
+        if(response.last_page > 1){
+          var pag = '<div class="text-center paginator-calls"><ul class="pagination">';
+          pag += "<li class='disabled'><span>«</span></li>";
+          for(var j = 1; j <= response.last_page; j++){
+            if(j == 1){
+              pag += "<li class='active'><a href='?action=searchCall&search="+search+"&page="+j+"'><span>"+j+"</span></a></li>";
+            }
+            else{
+              pag += "<li><a href='?action=searchCall&search="+search+"&page="+j+"'>"+j+"</a></li>";
+            }
+            
+          }
+
+          pag += "<li><a href='?action=searchCall&search="+search+"&page=2' rel='next'>»</a></li>";
+          
+
+          pag +='</ul></div>';
+          $('.paginator-calls-search').html(pag);
+          
+        }
+
+      }
+    });
+  });
+
 });

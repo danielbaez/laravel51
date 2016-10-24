@@ -12,12 +12,44 @@ use App\Call;
 
 class CallController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //dd(Call::all()->first());
-        
-        $calls = Call::getCalls();
-        return view('panel.calls.index', compact('calls'));
+        if($request->get('action') == 'searchCall')
+        {
+            //dd($request->get('action'));
+            $calls = Call::searchCall($request->get('search'));
+            if($calls)
+            {
+                if ($request->ajax()) {
+                    return $calls;    
+                }
+                
+                /*return response()->json([
+                    'status' => 'success',
+                    'errors' => false,
+                    'data' => [
+                        'rows' => json_decode($dataSearched->toJson()),
+                        'paginationMarkup' => $dataSearched->render()
+                    ]
+                ], 200);*/
+
+                //$calls->setPath('?action=searchCall&search='.$request->get('search').'&');
+
+                $calls->setPath('')->appends(['action' => 'searchCall', 'search' => $request->get('search')])->render();
+
+                return view('panel.calls.index', compact('calls'));
+            }
+            else
+            {
+                return json_encode(array("success"=>false));
+            }
+        }
+        else{
+            //dd(Call::all()->first());
+            
+            $calls = Call::getCalls();
+            return view('panel.calls.index', compact('calls'));
+        }
     }
 
     public function operation(Request $request)
@@ -44,6 +76,43 @@ class CallController extends Controller
         else
         {
             return json_encode(array("success"=>false, "msg" => 'No existe el id'));
+        }
+    }
+
+    public function calllAjax(Request $request)
+    {
+        if($request->get('action') == 'entriesMoreClient')
+        {
+            $moreData = Call::entriesMoreClient($request->get('email'), $request->get('id'));
+            if($moreData)
+            {
+                return json_encode(array("success"=>true, "result" => $moreData));
+            }
+            else
+            {
+                return json_encode(array("success"=>false));
+            }
+            
+        }
+        if($request->get('action') == 'searchCall')
+        {
+            $dataSearched = Call::searchCall($request->get('search'));
+            if($dataSearched)
+            {
+                return $dataSearched;
+                /*return response()->json([
+                    'status' => 'success',
+                    'errors' => false,
+                    'data' => [
+                        'rows' => json_decode($dataSearched->toJson()),
+                        'paginationMarkup' => $dataSearched->render()
+                    ]
+                ], 200);*/
+            }
+            else
+            {
+                return json_encode(array("success"=>false));
+            }
         }
     }
 }

@@ -10,15 +10,15 @@
 			<p style="padding-top:6px"><strong>Busqueda por Nombre o email:</strong></p>
 		</div>
 		<div class="col col-xs-8 col-sm-6 text-center">
-			<input class="form-control" type="text" placeholder="Ingrese nombre o email">
+			<input class="form-control" type="text" name="search" placeholder="Ingrese nombre o email">
 		</div>
 		<div class="col col-xs-4 col-sm-3 text-center">
-			<button class="btn btn-primary">Buscar</button>
+			<button class="btn btn-primary  btn-search">Buscar</button>
 		</div>
 	</div>
 	<br><br>
 
-	<div class="table-responsive">
+	<div class="table-responsive table-calls">
 	  <table class="table table-striped table-hover">
 	  	<thead>
 	  	  <tr><th class="text-center">ID</th><th class="text-center">Name / Email</th><th class="text-center">Fecha</th><th class="text-center">Celular</th><th class="text-center">Solicitar</th><th class="text-center">Llamar</th><th class="text-center">Prima</th><th class="text-center">Compañia</th><th class="text-center">Operación</th></tr>
@@ -26,12 +26,12 @@
 	  	<tbody>
 	  		@foreach($calls as $c)
 	  			<?php $request = ($c->request); ?>
-	  			<tr>
+	  			<tr data-idcall="{{$c->id}}">
 	  				<td class="text-center">
 	  					{{ $c->id }}
 	  					<?php if($c->cant > 1){
 	  					?>
-	  						<button class="btn moreEntranceClient" style="color:white;background:teal; font-size:15px" data-more="{{$c->id}}" data-email="{{$c->e}}">{{$c->cant}} <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+	  						<button class="btn entriesMoreClient" style="color:white;background:teal; font-size:15px" data-id="{{$c->id}}" data-email="{{$c->e}}">{{$c->cant}} <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
 	  					<?php
 	  					}
 	  					?>
@@ -73,6 +73,20 @@
 	  </table>
 	</div>
 
+	<div class="table-responsive table-calls-search" style="display:none">
+	  <table class="table table-striped table-hover">
+	  	<thead>
+	  	  <tr><th class="text-center">ID</th><th class="text-center">Name / Email</th><th class="text-center">Fecha</th><th class="text-center">Celular</th><th class="text-center">Solicitar</th><th class="text-center">Llamar</th><th class="text-center">Prima</th><th class="text-center">Compañia</th><th class="text-center">Operación</th></tr>
+	  	</thead>
+	  	<tbody>
+	  		
+	  	</tbody>
+	  	<tbody>
+	  		
+	  	</tbody>
+	  </table>
+	</div>
+
 <!-- Modal 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
@@ -93,8 +107,11 @@
 </div> -->
 
 
-<div class="text-center">
+<div class="text-center paginator-calls">
 	{!! $calls->render() !!}
+</div>
+
+<div class="text-center paginator-calls-search">
 </div>
 
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="myModal">

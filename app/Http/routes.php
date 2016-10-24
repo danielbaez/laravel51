@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth', 'no-cache'], 'prefix'=>'admin'], function
 	Route::group( ['middleware' => ['agente']], function() {
 		Route::get('/calls', ['as' => 'calls', 'uses' => 'CallController@index']);
 		Route::post('/calls/operation', ['as' => 'calls-operation', 'uses' => 'CallController@operation']);
+		Route::get('/calls/ajax', ['as' => 'calls-ajax', 'uses' => 'CallController@calllAjax']);
 	});
 
 });
