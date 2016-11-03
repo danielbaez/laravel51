@@ -100,3 +100,23 @@ body {
 input.form-control.input-tel {
   width: auto
 }
+
+.call-bagde{
+  font-size: 15px;
+  background-color: #FF5722;
+  font-weight: 400;
+}
+
+.call-bagde-dif{
+  font-size: 15px;
+  background-color: rgba(255, 87, 34, 0.67);
+  font-weight: 400;
+}
+
+.table-colum-id{
+  margin: 0px 0px 3px 0px;
+}
+
+.bagde-counter-call{
+  cursor:pointer;
+}

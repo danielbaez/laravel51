@@ -144,6 +144,6 @@ class UserController extends Controller
         
         $message = $deleted ? 'Usuario eliminado correctamente!' : 'El Usuario NO pudo eliminarse!';
         
-        return redirect()->route('user.index')->with('message', $message);
+        return redirect()->route('admin.user.index')->with('message', $message);
     }
 }

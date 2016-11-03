@@ -23,17 +23,6 @@ class CallController extends Controller
                 if ($request->ajax()) {
                     return $calls;    
                 }
-                
-                /*return response()->json([
-                    'status' => 'success',
-                    'errors' => false,
-                    'data' => [
-                        'rows' => json_decode($dataSearched->toJson()),
-                        'paginationMarkup' => $dataSearched->render()
-                    ]
-                ], 200);*/
-
-                //$calls->setPath('?action=searchCall&search='.$request->get('search').'&');
 
                 $calls->setPath('')->appends(['action' => 'searchCall', 'search' => $request->get('search')])->render();
 
@@ -60,18 +49,21 @@ class CallController extends Controller
             $idOperation = $request->get('operacion');
             switch ($idOperation) {
                 case 5:
-                    $id = Call::find($idCall);
-                    $id->state = 1;
-                    $id->save();
-                    return json_encode(array('success'=>$idOperation, 'result'=>$id));
+                    $client = Call::find($idCall);
+                    $client->state = 5;
+                    $time = $request->get('fecha');
+                    $time .= " -0500";
+                    //$time = strtotime('10/25/2016 12:12 PM -0500');
+                    $time = strtotime($time);
+                    $client->update = $time;
+                    $client->save();
+                    return json_encode(array('success'=> true));
                     break;
                 
                 default:
                     # code...
                     break;
             }
-            //dd($request);
-            return json_encode(array("success"=>true));
         }
         else
         {
@@ -87,6 +79,32 @@ class CallController extends Controller
             if($moreData)
             {
                 return json_encode(array("success"=>true, "result" => $moreData));
+            }
+            else
+            {
+                return json_encode(array("success"=>false));
+            }
+            
+        }
+        if($request->get('action') == 'calling')
+        {
+            $calling = Call::calling($request->get('idCall'));
+            if($calling)
+            {
+                return json_encode(array("success"=>true, "result" => $calling[0]));
+            }
+            else
+            {
+                return json_encode(array("success"=>false));
+            }
+            
+        }
+        if($request->get('action') == 'detailCall')
+        {
+            $detailCall = Call::detailCall($request->get('idCall'));
+            if($detailCall)
+            {
+                return json_encode(array("success"=>true, "result" => $detailCall));
             }
             else
             {

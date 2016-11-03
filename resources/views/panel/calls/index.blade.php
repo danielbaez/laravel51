@@ -4,6 +4,19 @@
 	<div style="display:none">{{ date_default_timezone_set('America/Lima') }}</div>
 	@include('partials.messages')
 	<div class="row">
+		<div class="alert alert-info alert-dismissible text-center" id="msgOperationSuccessDiv" role="alert" style="display:none">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<h4><strong><i class="fa fa-info-circle"></i></strong> <span id="msgOperationSuccess"></span></h4>
+		</div>
+		<div class="alert alert-danger alert-dismissible text-center" id="msgOperationErrorDiv" role="alert" style="display:none">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<h4><strong><i class="fa fa-info-circle"></i></strong> <span id="msgOperationError"></span></h4>
+		</div>
+
 		<h4>Calls Comparison</h4>
 		<br>
 		<div class="col hidden-xs col-sm-3 text-center">
@@ -28,7 +41,7 @@
 	  			<?php $request = ($c->request); ?>
 	  			<tr data-idcall="{{$c->id}}">
 	  				<td class="text-center">
-	  					{{ $c->id }}
+	  					<p class="table-colum-id">{{ $c->id }}</p>
 	  					<?php if($c->cant > 1){
 	  					?>
 	  						<button class="btn entriesMoreClient" style="color:white;background:teal; font-size:15px" data-id="{{$c->id}}" data-email="{{$c->e}}">{{$c->cant}} <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
@@ -60,7 +73,9 @@
 							<br><a href="{{$c->compare}}" target="_blank">Resultados</a>
 						<?php } ?>
 					</td>
-	  				<td class="text-center"><button class="btn btn-success"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></button></td>
+	  				<td class="text-center"><button class="btn btn-success btn-calling"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></button><p class="counterCall" style="margin-top: 7px;"><?php if($c->countCall > 0){?>
+	  					<span class="badge call-bagde bagde-counter-call">{{ $c->countCall }}</span></p>
+	  				<?php } ?></td>
 	  				<td>{{ $c->prima }}</td>
 	  				<td>{{ $c->company }}</td>
 	  				<td class="text-center"><a class="btn btn-warning btn-actualizar"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a></td>
@@ -118,6 +133,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <form id="form-operations" action="{{route('calls-operation')}}" method="POST">
     	{!! csrf_field() !!}
+    	<input type="hidden" name="idCall" id="idCall">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -211,6 +227,24 @@
 	      </div>
 	    </div><!-- /.modal-content -->
     </form>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modalDetailCall">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="gridSystemModalLabel">Detalle de Llamadas</h4>
+	      </div>
+	      <div class="modal-body body-detail-call text-center">
+	      	
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
+	      </div>
+	</div>
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 

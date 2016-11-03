@@ -1,4 +1,18 @@
 $( document ).ready(function() {
+
+  function timeConverter(UNIX_timestamp){
+    var a = new Date(UNIX_timestamp * 1000);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var year = a.getFullYear();
+    //var month = months[a.getMonth()];
+    var month = ("0" + (a.getMonth() + 1)).slice(-2);
+    var date = ("0" + (a.getDate())).slice(-2);
+    var hour = ("0" + (a.getHours())).slice(-2);
+    var min = ("0" + (a.getMinutes())).slice(-2);
+    //var sec = ("0" + (a.getSeconds())).slice(-2);
+    var date_format = date + '-' + month + '-' + year + ' ' + hour + ':' + min;
+    return date_format;
+  }
     
   $('input[type=radio][name=type]').change(function() {
     if (this.value == '3') {
@@ -11,7 +25,7 @@ $( document ).ready(function() {
     }
   });
 
-  $('.btn-actualizar').on('click', function() {
+  $(document).on('click', '.btn-actualizar', function() {
 
      var idCall = $(this).closest("tr").data('idcall');
      $("#idCall").val(idCall);
@@ -123,15 +137,26 @@ $( document ).ready(function() {
     })
     .done(function(data){
       console.log(data);
-      $('#msgOperationDiv').show();
-      $('#msgOperation').html('La operación se ha realizado con éxito!');
-      $('#myModal').modal('hide');
+      $('#msgOperationSuccessDiv').hide();
+      $('#msgOperationErrorDiv').hide();
+      if(data.success == true){
+        $('#msgOperationSuccessDiv').show();
+        $('#msgOperationSuccess').html('La operación se ha realizado con éxito!');
+        $('#myModal').modal('hide');
+        $("tr[data-idcall="+$("#idCall").val()+"]").remove();
+        $('html, body').animate({scrollTop: 0}, 500);
+      }
+      else{
+        $('#msgOperationErrorDiv').show();
+        $('#msgOperationError').html('La operación no se puede realizar!');
+        $('#myModal').modal('hide');
+      }      
     })
   });
 
 
   $('#datetimepicker1').datetimepicker({
-    format: 'YYYY-MM-DD hh:mm A',
+    format: 'MM/DD/YYYY hh:mm A',
     ignoreReadonly: true
   });
 
@@ -176,7 +201,13 @@ $( document ).ready(function() {
               carname += "<br><a href='"+result[i].compare+"' target='_blank'>Resultados</a>";
             } 
 
-            html = "<tr style='border-left: 12px solid dodgerblue;' data-idParent="+id+"><td class='text-center'>"+result[i].id+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+result[i].time+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button></td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar disabled'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
+            var counterCalls = '<p class="counterCall" style="margin-top: 7px;">';
+            if(result[i].countCall > 0){
+              counterCalls += '<span class="badge call-bagde bagde-counter-call">'+result[i].countCall+'</span>';
+            }
+            counterCalls+='</p>';
+
+            html = "<tr style='border-left: 12px solid dodgerblue;' data-idParent="+id+"><td class='text-center'>"+result[i].id+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+result[i].time+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar disabled'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
 
             inst.closest("tr").after(html);
             inst.closest("tr").css('border-left','20px solid green');
@@ -193,6 +224,49 @@ $( document ).ready(function() {
       inst.find('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
       inst.closest("tr").removeClass('showMoreEntriesClient');
     }
+  });
+
+  $(document).on('click', '.btn-calling', function() {
+    var btn = $(this);
+    if(btn.hasClass('btn-success')){
+      var idCall = $(this).closest("tr").data('idcall');
+      var url = 'calls/ajax';
+      $.ajax({
+        data: {idCall: idCall, action:'calling'},
+        type: "GET",
+        dataType: "json",
+        url: url,
+      })
+      .done(function(response){
+        btn.removeClass('btn-success').addClass('btn-danger');
+        console.log(response);
+        $("tr[data-idcall="+idCall+"]").find('.counterCall').html('<span class="badge call-bagde bagde-counter-call">'+response.result.counter+'</span>');
+        console.log("tr[data-idcall="+idCall+"]");
+      });
+    }
+    else{
+      btn.removeClass('btn-danger').addClass('btn-success');
+    }
+  });
+
+  $(document).on('click', '.bagde-counter-call', function() {
+    $('.body-detail-call').html('');
+    $('#modalDetailCall').modal(); 
+    var idCall = $(this).closest("tr").data('idcall');
+    var url = 'calls/ajax';
+    $.ajax({
+      data: {idCall: idCall, action:'detailCall'},
+      type: "GET",
+      dataType: "json",
+      url: url,
+    })
+    .done(function(response){
+      var body = '';
+      for(var i = 0; i < response.result.length; i++){
+        body += "<button style='margin:13px;padding:13px 20px' class='btn btn-primary' type='button'><span class='badge'>"+response.result[i].id+"</span> "+timeConverter(response.result[i].time)+"</button>";
+      }
+      $('.body-detail-call').html(body);
+    });
   });
 
   $('.btn-search').on('click', function() {
@@ -230,10 +304,16 @@ $( document ).ready(function() {
           } 
           var moreCalls = '';
           if(result[i].cant > 1){
-            moreCalls = '<button class="btn entriesMoreClient" style="color:white;background:teal; font-size:15px" data-id='+result[i].id+' data-email="'+result[i].e+'"">'+result[i].cant+' <i class="fa fa-arrow-down" aria-hidden="true"></i></button>';
+            moreCalls = '<button class="btn entriesMoreClient" style="color:white;background:teal; font-size:15px" data-id='+result[i].id+' data-email="'+result[i].e+'">'+result[i].cant+' <i class="fa fa-arrow-down" aria-hidden="true"></i></button>';
           }
 
-          html = "<tr data-idcall="+result[i].id+"><td class='text-center'>"+result[i].id+' '+moreCalls+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+result[i].time+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button></td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
+          var counterCalls = '<p class="counterCall" style="margin-top: 7px;">';
+          if(result[i].countCall > 0){
+            counterCalls += '<span class="badge call-bagde bagde-counter-call">'+result[i].countCall+'</span>';
+          }
+          counterCalls+='</p>';
+
+          html = "<tr data-idcall="+result[i].id+"><td class='text-center'><p class='table-colum-id'>"+result[i].id+"</p>"+moreCalls+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+result[i].time+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn btn-success btn-calling'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
 
           $('.table-calls-search tbody:last-child').append(html);
         }  
