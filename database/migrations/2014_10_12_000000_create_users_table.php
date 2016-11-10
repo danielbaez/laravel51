@@ -17,11 +17,12 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password', 60);
-            $table->enum('type', [1,2,3]);
+            $table->integer('type')->unsigned();
             $table->integer('company_id');
             //$table->integer('company_id')->unsigned();
             //$table->foreign('company')->references('CO_COMPANY_ID')->on('compare_pe.PE_COMPANIES');
             //$table->foreign('company_id')->references('id')->on('companies');
+            $table->foreign('type')->references('id')->on('type');
             $table->string('country');
             $table->string('phone_pe');
             $table->string('phone_mx');

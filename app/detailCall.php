@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class detailCall extends Model
+class DetailCall extends Model
 {
     
 }

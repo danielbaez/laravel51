@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Lead;
 use App\Call;
+use App\DetailOperation;
 
 class CallController extends Controller
 {
@@ -57,6 +58,7 @@ class CallController extends Controller
                     $time = strtotime($time);
                     $client->update = $time;
                     $client->save();
+                    DetailOperation::insertDetailOperation($idCall, $idOperation, $time);
                     return json_encode(array('success'=> true));
                     break;
                 
