@@ -164,11 +164,8 @@
 	              </div>
               <div class="form-group div-producto col-xs-12">
 						    <label for="operacion">Producto</label>
-							    <select class="form-control" name="producto" id="select-producto">
-								  <option value="">Seleccione un Producto</option>
-								  <option value="5">Rimac Web</option>
-								  <option value="1">Exito</option>
-								</select>
+							    
+						    {!! Form::select('producto', $products, null, ['class' => 'form-control', 'id' => 'select-producto', 'placeholder' => 'Seleccione un Producto']) !!}
 						  </div>
 						  <div class="form-group div-motivo col-xs-12">
 						    <label for="operacion">Motivo</label>

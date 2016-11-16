@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Lead;
 use App\Call;
+use App\Product;
 use App\DetailOperation;
 
 class CallController extends Controller
@@ -26,8 +27,8 @@ class CallController extends Controller
                 }
 
                 $calls->setPath('')->appends(['action' => 'searchCall', 'search' => $request->get('search')])->render();
-
-                return view('panel.calls.index', compact('calls'));
+                $products = Product::getProducts();
+                return view('panel.calls.index', compact('calls', 'products'));
             }
             else
             {
@@ -38,7 +39,8 @@ class CallController extends Controller
             //dd(Call::all()->first());
             
             $calls = Call::getCalls();
-            return view('panel.calls.index', compact('calls'));
+            $products = Product::getProducts();
+            return view('panel.calls.index', compact('calls', 'products'));
         }
     }
 
@@ -46,26 +48,31 @@ class CallController extends Controller
     {
         if($request->get('idCall'))
         {
-            $idCall = $request->get('idCall');
-            $idOperation = $request->get('operacion');
-            switch ($idOperation) {
+            $call_id = $request->get('idCall');
+            $operation_id = $request->get('operacion');
+            $time = $request->get('fecha');
+            $time .= " -0500";
+            $time = strtotime($time);
+            $comment = $request->get('comentario');
+
+            Call::updateLogCall($call_id, $operation_id, $time);
+            
+            switch ($operation_id) {
                 case 5:
-                    $client = Call::find($idCall);
-                    $client->state = 5;
-                    $time = $request->get('fecha');
-                    $time .= " -0500";
-                    //$time = strtotime('10/25/2016 12:12 PM -0500');
-                    $time = strtotime($time);
-                    $client->update = $time;
-                    $client->save();
-                    DetailOperation::insertDetailOperation($idCall, $idOperation, $time);
-                    return json_encode(array('success'=> true));
-                    break;
-                
+                    $data = array('call_id' => $call_id, 'operation_id' => $operation_id, 'comment' => $comment, 'time' => $time);
+                    //DetailOperation::insertDetailOperation($call_id, $operation_id, $comment, $time);
+                    DetailOperation::insertDetailOperation($data);
+                break;
+                case 1:
+                    $product_id = $request->get('producto');
+                    $data = array('call_id' => $call_id, 'operation_id' => $operation_id, 'product_id' => $product_id ,'comment' => $comment, 'time' => $time);
+                    DetailOperation::insertDetailOperation($data);
+                break;
                 default:
                     # code...
                     break;
             }
+            return json_encode(array('success'=> true));            
         }
         else
         {

@@ -418,4 +418,13 @@ class Call extends Model
 		return $detailCall;
 	}
 
+	public static function updateLogCall($call_id, $operation_id, $time)
+	{
+		$c = call::find($call_id);
+		$c->state = $operation_id;
+		$c->update = $time;
+		$c->save();
+	}
+
+
 }

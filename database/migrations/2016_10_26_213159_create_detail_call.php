@@ -13,12 +13,12 @@ class CreateDetailCall extends Migration
     public function up()
     {
         Schema::create('compare_pe.DETAIL_CALLS', function (Blueprint $table) {
+       
             $table->increments('id');
             $table->integer('call_id');
-            $table->integer('agent_id')->unsigned();
-            $table->integer('time');     
-            $table->foreign('agent_id')->references('id')->on('panel.users');
-
+            $table->integer('agent_id');
+            $table->integer('time');  
+            $table->foreign('call_id')->references('id')->on('LOG_CALLS');
         });
     }
 
