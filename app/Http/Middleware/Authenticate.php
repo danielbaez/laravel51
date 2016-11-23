@@ -68,7 +68,8 @@ class Authenticate
             \Session::push('menu', (object)array('title'=>'Dashboard', 'route'=>'home', 'path' => 'admin', 'icon'=>'fa-dashboard')); 
             \Session::push('menu', (object)array('title'=>'Usuarios','route'=>'admin.user.index', 'path' => 'admin/user', 'icon'=>'fa-users'));
 
-            \Session::push('menu', (object)array('title'=>'Llamadas','route'=>'calls', 'path' => 'admin/calls', 'icon'=>'fa-phone')); 
+            \Session::push('menu', (object)array('title'=>'Llamadas','route'=>'calls', 'path' => 'admin/calls', 'icon'=>'fa-phone'));
+            \Session::push('menu', (object)array('title'=>'Reprogramaciones y Cotizaciones','route'=>'repcot', 'path' => 'admin/repcot', 'icon'=>'fa-phone')); 
         }
         if($this->auth->user()->type == 3){
             \Session::push('menu', (object)array('title'=>'Dashboard', 'route'=>'home', 'path' => 'admin', 'icon'=>'fa-dashboard'));  

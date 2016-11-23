@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDetailCall extends Migration
+class CreateDetailCallOperation extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,13 @@ class CreateDetailCall extends Migration
      */
     public function up()
     {
-        Schema::create('compare_pe.DETAIL_CALLS', function (Blueprint $table) {
+        Schema::create('compare_pe.DETAIL_CALLS_OPERATION', function (Blueprint $table) {
        
             $table->increments('id');
-            $table->integer('call_id');
+            $table->integer('call_id')->unsigned();
             $table->integer('agent_id')->unsigned();
             $table->integer('time');  
-            $table->foreign('call_id')->references('id')->on('LOG_CALLS');
+            $table->foreign('call_id')->references('id')->on('DETAIL_OPERATION');
             $table->foreign('agent_id')->references('id')->on('panel.users');
         });
     }
@@ -30,6 +30,6 @@ class CreateDetailCall extends Migration
      */
     public function down()
     {
-        Schema::drop('compare_pe.DETAIL_CALLS');
+        Schema::drop('compare_pe.DETAIL_CALLS_OPERATION');
     }
 }

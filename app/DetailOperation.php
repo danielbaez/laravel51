@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Support\Facades\Auth;
 
+use DB;
+
 class DetailOperation extends Model
 {
     public $timestamps = false;
@@ -33,21 +35,56 @@ class DetailOperation extends Model
 		return $insert->save();
 	}*/
 
+	public static function calling($id_call)
+	{
+		DB::table('compare_pe.DETAIL_CALLS_OPERATION')->insert(['call_id' => $id_call, 'agent_id' => Auth::user()->id, 'time' => time()]);
+
+		$insertCall = DB::table('compare_pe.DETAIL_CALLS_OPERATION')->select(DB::raw("count(*) as counter"))->where('call_id', $id_call)->get();
+
+		return $insertCall;
+	}
+
+	public static function detailCall($id_call)
+	{
+		$detailCall = DB::table('compare_pe.DETAIL_CALLS_OPERATION')->select(DB::raw("*"))->where('call_id', $id_call)->orderBy('id', 'DESC')->get();
+
+		return $detailCall;
+	}
+
 	public static function insertDetailOperation($data)
-	{		
+	{	
+		$idt= 0;
+		if(is_numeric($data['id']))
+		{
+			$idt = $data['id'];
+		}
+		DB::update("UPDATE compare_pe.detail_operation SET state = 1 WHERE call_id = '".$data['call_id']."'");
+		//acatualizar todos los call_id = $data['call_id'] con state = 1 y leugo insertar
 		$insert = new DetailOperation;
 		$insert->call_id = $data['call_id'];
 		$insert->agent_id = Auth::user()->id;
 		$insert->operation_id = $data['operation_id'];
 		$insert->comment = $data['comment'];
-		$insert->time = $data['time'];
+		$insert->time = 0;
+		$insert->updated = time();
+		$insert->product_id = 0;
+		$insert->last = $idt;
 
 		switch ($data['operation_id']) {
-			case 5:
 			
-			break;
 			case 1:
 				$insert->product_id = $data['product_id'];
+			break;
+			case 2:
+				$insert->motive_id = $data['motive_id'];
+			break;
+			case 4:
+				$insert->product_id = $data['product_id'];
+				$insert->time = $data['time'];
+				$insert->quotation = $data['quotation'];
+			break;
+			case 5:
+				$insert->time = $data['time'];
 			break;
 		}
 		return $insert->save();

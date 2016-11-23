@@ -27,8 +27,19 @@ $( document ).ready(function() {
 
   $(document).on('click', '.btn-actualizar', function() {
 
-     var idCall = $(this).closest("tr").data('idcall');
-     $("#idCall").val(idCall);
+     
+     var email = $(this).closest("tr").data('email');
+     $('#email').val(email);
+
+    if($('#uri').val() == 'repcot'){
+      var idCall = $(this).closest("tr").data('id');
+      $("#idCall").val(idCall);
+      $("#idt").val($(this).closest("tr").data('idcall'));
+    }
+    else{
+      var idCall = $(this).closest("tr").data('idcall');
+      $("#idCall").val(idCall);
+    }     
 
     $("#select-operaciones option[value='']").prop('selected',true);
     $("#select-motivo option[value='']").prop('selected',true);
@@ -48,6 +59,7 @@ $( document ).ready(function() {
   });
 
   $('#select-operaciones').on('change', function() {
+    $('#comment').val('');
     $('.div-fecha').hide();
     $('.div-comentario').hide();
     $('.div-producto').hide();
@@ -207,7 +219,73 @@ $( document ).ready(function() {
             }
             counterCalls+='</p>';
 
-            html = "<tr style='border-left: 12px solid dodgerblue;' data-idParent="+id+"><td class='text-center'>"+result[i].id+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+result[i].time+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar disabled'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
+            html = "<tr style='border-left: 12px solid dodgerblue;' data-idParent="+id+"><td class='text-center'>"+result[i].id+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+timeConverter(result[i].time)+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar disabled'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
+
+            inst.closest("tr").after(html);
+            inst.closest("tr").css('border-left','20px solid green');
+          } 
+
+            
+        }
+        
+      })
+    }
+    else{
+      $("tr[data-idParent='"+id+"']").remove();
+      inst.closest("tr").css('border-left','none');
+      inst.find('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+      inst.closest("tr").removeClass('showMoreEntriesClient');
+    }
+  });
+
+  $(document).on('click', '.entriesMoreClientRepCot', function(even) {
+    even.preventDefault();
+    var inst = $(this);
+    var email = $(this).data('email');
+    var id = $(this).data('id');
+    var idt = $(this).data('idt');
+    var other = $("tr.showMoreEntriesClient").data('idcall');
+    if(other != idt){
+      $("tr[data-idParent='"+other+"']").remove();
+      $("tr.showMoreEntriesClient").css('border-left','none');
+      $("tr.showMoreEntriesClient").find('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+      $("tr.showMoreEntriesClient").removeClass('showMoreEntriesClient');
+    }
+    if(inst.find('i').hasClass('fa-arrow-down')){
+      inst.closest("tr").addClass('showMoreEntriesClient');
+      inst.find('i').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+      var url = 'calls/ajax';
+      $.ajax({
+        data: {id:id, idt:idt, action:'entriesMoreClientRepCot'},
+        type: "GET",
+        dataType: "json",
+        url: url,
+      })
+      .done(function(data){
+        if(data.success){
+          var result = data.result;
+          for(var i = 0; i < result.length; i++){
+            var html = '';
+            var carname = '';
+            if(result[i].request['carname'])
+            {
+              carname = result[i].request['carname'];
+            }
+            if(result[i].request['year'])
+            {
+              carname += "("+result[i].request['year']+")";
+            }
+            if(result[i].compare && result[i].compare.length > 0){
+              carname += "<br><a href='"+result[i].compare+"' target='_blank'>Resultados</a>";
+            } 
+
+            var counterCalls = '<p class="counterCall" style="margin-top: 7px;">';
+            if(result[i].countCall > 0){
+              counterCalls += '<span class="badge call-bagde bagde-counter-call">'+result[i].countCall+'</span>';
+            }
+            counterCalls+='</p>';
+
+            html = "<tr style='border-left: 12px solid dodgerblue;' data-idParent="+id+"><td class='text-center'>"+result[i].id+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+timeConverter(result[i].time)+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar disabled'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
 
             inst.closest("tr").after(html);
             inst.closest("tr").css('border-left','20px solid green');
@@ -229,10 +307,12 @@ $( document ).ready(function() {
   $(document).on('click', '.btn-calling', function() {
     var btn = $(this);
     if(btn.hasClass('btn-success')){
+      var t = $(this).closest("tr").data('table');
+
       var idCall = $(this).closest("tr").data('idcall');
       var url = 'calls/ajax';
       $.ajax({
-        data: {idCall: idCall, action:'calling'},
+        data: {idCall: idCall, t: t, action:'calling'},
         type: "GET",
         dataType: "json",
         url: url,
@@ -254,8 +334,9 @@ $( document ).ready(function() {
     $('#modalDetailCall').modal(); 
     var idCall = $(this).closest("tr").data('idcall');
     var url = 'calls/ajax';
+    var t = $(this).closest("tr").data('table');
     $.ajax({
-      data: {idCall: idCall, action:'detailCall'},
+      data: {idCall: idCall, t: t, action:'detailCall'},
       type: "GET",
       dataType: "json",
       url: url,

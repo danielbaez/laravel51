@@ -39,13 +39,24 @@
 	  	<tbody>
 	  		@foreach($calls as $c)
 	  			<?php $request = ($c->request); ?>
-	  			<tr data-idcall="{{$c->id}}">
+	  			<tr data-idcall="{{$c->id}}" data-email="{{$c->e}}" {{$c->normal == 0 ? 'data-id='.$c->call_id.' data-table=repcot' : 'data-table=calls'}}>
 	  				<td class="text-center">
 	  					<p class="table-colum-id">{{ $c->id }}</p>
 	  					<?php if($c->cant > 1){
-	  					?>
-	  						<button class="btn entriesMoreClient" style="color:white;background:teal; font-size:15px" data-id="{{$c->id}}" data-email="{{$c->e}}">{{$c->cant}} <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
-	  					<?php
+
+	  						if($c->normal == 1)
+	  						{
+	  							?>
+		  						<button class="btn entriesMoreClient" style="color:white;background:teal; font-size:15px" data-id="{{$c->id}}" data-email="{{$c->e}}">{{$c->cant}} <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+		  					<?php
+	  						}
+	  						else
+	  						{
+	  							?>
+		  						<button class="btn entriesMoreClientRepCot" style="color:white;background:teal; font-size:15px" data-id="{{$c->call_id}}" data-idt="{{$c->id}}" data-email="{{$c->e}}">{{$c->cant}} <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+		  					<?php
+	  						}
+	  					
 	  					}
 	  					?>
 	  				</td>
@@ -134,6 +145,8 @@
     <form id="form-operations" action="{{route('calls-operation')}}" method="POST">
     	{!! csrf_field() !!}
     	<input type="hidden" name="idCall" id="idCall">
+    	<input type="hidden" name="idt" id="idt">
+    	<input type="hidden" name="uri" id="uri" {{ (Request::is('admin/repcot') ? 'value=repcot' : 'value=calls') }}>
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -189,7 +202,7 @@
 		          </div>
 		          <div class="form-group div-email col-xs-12 col-sm-6 col-md-7">
 		          	<label for="email">Email</label><br>
-						    <input type='email' class="form-control" name="email" />
+						    <input type='email' id="email" class="form-control" name="email" />
 		          </div>
 		          <div class="form-group div-valor col-xs-12 col-sm-3 col-md-3">
 		          	<label for="email">Valor del auto</label><br>
