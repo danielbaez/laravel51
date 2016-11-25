@@ -644,6 +644,9 @@ class Call extends Model
 		$c->state = $data['operation_id'];
 		$c->update = $data['time'];
 		switch ($data['operation_id']) {
+			case 2:
+				$c->motive = $data['motive_id'];
+			break;
 			case 4:
 				$c->e = $data['email'];
 			break;

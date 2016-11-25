@@ -120,3 +120,7 @@ input.form-control.input-tel {
 .bagde-counter-call{
   cursor:pointer;
 }
+
+.info-cotiz {
+  font-size:20px; margin-top:5px;cursor:pointer !important
+}

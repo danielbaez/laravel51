@@ -104,12 +104,12 @@ class CallController extends Controller
                     $data = array('call_id' => $call_id, 'operation_id' => $operation_id, 'product_id' => $product_id, 'comment' => $comment, 'time' => $time, 'id' => $idt);
                 break;
                 case 2:
-                    $dataLog = array('call_id' => $call_id, 'operation_id' => $operation_id, 'time' => $time);
+                    $motive_id = $request->get('motivo');
+                    $dataLog = array('call_id' => $call_id, 'operation_id' => $operation_id, 'motive_id' => $motive_id, 'time' => $time);
                     if($uri == 'calls')
                     {
                         Call::updateLogCall($dataLog);
                     }
-                    $motive_id = $request->get('motivo');
                     $data = array('call_id' => $call_id, 'operation_id' => $operation_id, 'motive_id' => $motive_id, 'comment' => $comment, 'time' => $time, 'id' => $idt);
                 break;
                 case 4:
@@ -235,6 +235,18 @@ class CallController extends Controller
                         'paginationMarkup' => $dataSearched->render()
                     ]
                 ], 200);*/
+            }
+            else
+            {
+                return json_encode(array("success"=>false));
+            }
+        }
+        if($request->get('action') == 'detailCotiz')
+        {
+            $dataSearched = DetailOperation::getDetailCotiz($request->get('id'));
+            if($dataSearched)
+            {
+                return $dataSearched;
             }
             else
             {

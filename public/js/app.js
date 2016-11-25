@@ -155,7 +155,13 @@ $( document ).ready(function() {
         $('#msgOperationSuccessDiv').show();
         $('#msgOperationSuccess').html('La operación se ha realizado con éxito!');
         $('#myModal').modal('hide');
-        $("tr[data-idcall="+$("#idCall").val()+"]").remove();
+        if($('#uri').val() == 'repcot'){
+          $("tr[data-idcall="+$("#idt").val()+"]").remove();  
+        }
+        else{
+          $("tr[data-idcall="+$("#idCall").val()+"]").remove();
+        }
+        
         $('html, body').animate({scrollTop: 0}, 500);
       }
       else{
@@ -219,7 +225,7 @@ $( document ).ready(function() {
             }
             counterCalls+='</p>';
 
-            html = "<tr style='border-left: 12px solid dodgerblue;' data-idParent="+id+"><td class='text-center'>"+result[i].id+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+timeConverter(result[i].time)+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar disabled'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
+            html = "<tr style='border-left: 12px solid dodgerblue;' data-idcall="+result[i].id+" data-idParent="+id+" data-table='calls'><td class='text-center'><p class='table-colum-id'>"+result[i].id+"</p></td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+timeConverter(result[i].time)+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar disabled'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
 
             inst.closest("tr").after(html);
             inst.closest("tr").css('border-left','20px solid green');
@@ -244,14 +250,17 @@ $( document ).ready(function() {
     var email = $(this).data('email');
     var id = $(this).data('id');
     var idt = $(this).data('idt');
+    var otherp = $("tr.showMoreEntriesClient").data('id');
     var other = $("tr.showMoreEntriesClient").data('idcall');
     if(other != idt){
-      $("tr[data-idParent='"+other+"']").remove();
+      
+      $("tr[data-idParent='"+otherp+"']").remove();
       $("tr.showMoreEntriesClient").css('border-left','none');
       $("tr.showMoreEntriesClient").find('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
       $("tr.showMoreEntriesClient").removeClass('showMoreEntriesClient');
     }
     if(inst.find('i').hasClass('fa-arrow-down')){
+      
       inst.closest("tr").addClass('showMoreEntriesClient');
       inst.find('i').removeClass('fa-arrow-down').addClass('fa-arrow-up');
       var url = 'calls/ajax';
@@ -285,7 +294,13 @@ $( document ).ready(function() {
             }
             counterCalls+='</p>';
 
-            html = "<tr style='border-left: 12px solid dodgerblue;' data-idParent="+id+"><td class='text-center'>"+result[i].id+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+timeConverter(result[i].time)+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar disabled'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
+            var aaa = '';
+
+            if(result[i].operation_id == 4){
+              aaa = '<i class="fa fa-database info-cotiz" aria-hidden="true" data-id='+result[i].id+'></i>';
+            }
+
+            html = "<tr style='border-left: 12px solid dodgerblue;' data-idcall="+result[i].id+" data-idParent="+id+" data-table='repcot'><td class='text-center'><p class='table-colum-id'>"+result[i].id+"</p>"+aaa+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+timeConverter(result[i].time)+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar disabled'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
 
             inst.closest("tr").after(html);
             inst.closest("tr").css('border-left','20px solid green');
@@ -297,6 +312,7 @@ $( document ).ready(function() {
       })
     }
     else{
+      
       $("tr[data-idParent='"+id+"']").remove();
       inst.closest("tr").css('border-left','none');
       inst.find('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
@@ -422,6 +438,28 @@ $( document ).ready(function() {
         }
 
       }
+    });
+  });
+
+  $(document).on('click', '.info-cotiz', function() {
+    $('.body-detail-call').html('');
+    $('#modalDetailCotiz').modal(); 
+    var id = $(this).data('id');
+    var url = 'calls/ajax';
+    $.ajax({
+      data: {id: id, action:'detailCotiz'},
+      type: "GET",
+      dataType: "json",
+      url: url,
+    })
+    .done(function(response){
+      var body = '<table class="table table-striped table-hover"><thead><tr><th class="text-center">GPS</th><th class="text-center">Valor</th><th class="text-center">Prima</th><th class="text-center">Cuota</th><th class="text-center">Nro Cuotas</th></tr></thead><tbody>';
+      body += '<tr><td>'+response.gps+'</td><td>'+response.valor+'</td><td>'+response.prima+'</td><td>'+response.cuota+'</td><td>'+response.nrocuotas+'</td></tr>';
+      body += '</tbody>';
+
+      body += '</table>';
+      
+      $('.body-detail-call').html(body);
     });
   });
 

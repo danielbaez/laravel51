@@ -51,6 +51,13 @@ class DetailOperation extends Model
 		return $detailCall;
 	}
 
+	public static function getDetailCotiz($id)
+	{
+		$detail = DetailOperation::where('id', $id)->select('quotation')->get();
+		$detail = unserialize($detail[0]->quotation);
+		return ($detail);
+	}
+
 	public static function insertDetailOperation($data)
 	{	
 		$idt= 0;

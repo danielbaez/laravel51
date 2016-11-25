@@ -58,6 +58,12 @@
 	  						}
 	  					
 	  					}
+
+	  					if($c->normal == 0 && $c->operation_id == 4){
+	  					?>
+	  						<i class="fa fa-database info-cotiz" aria-hidden="true" data-id="{{$c->id}}"></i>
+	  					<?php
+	  					}
 	  					?>
 	  				</td>
 	  				<td>{{ $c->name }}<br>{{ $c->e }}</td>
@@ -247,6 +253,23 @@
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <h4 class="modal-title" id="gridSystemModalLabel">Detalle de Llamadas</h4>
+	      </div>
+	      <div class="modal-body body-detail-call text-center">
+	      	
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
+	      </div>
+	</div>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="modalDetailCotiz">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="gridSystemModalLabel">Detalle Cotización</h4>
 	      </div>
 	      <div class="modal-body body-detail-call text-center">
 	      	
