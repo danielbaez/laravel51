@@ -188,7 +188,7 @@ class Call extends Model
 		array_push($user_inactive, $agente);
 		$agentes = implode("','",$user_inactive);
 
-		$a = DB::select("SELECT MAX(id) as max, call_id FROM $table WHERE time <= $time AND state = 0 AND operation_id IN(4,5) AND agent_id IN('".$agentes."') GROUP BY call_id");
+		$a = DB::select("SELECT MAX(id) as max, call_id FROM $table WHERE time <= $time AND state = 1 AND operation_id IN(4,5) AND agent_id IN('".$agentes."') GROUP BY call_id");
 		//echo $time;
 		//dd($a);
 		$c= array();
@@ -413,7 +413,7 @@ class Call extends Model
                     ->leftJoin('compare_pe.view_detail_calls_operation AS d', 'a.id', '=', 'd.call_id')
                     ->Where('a.call_id', $id)
                     ->Where('a.id', '<>', $idt)
-                    ->orderBy('a.id', 'DESC')
+                    ->orderBy('a.id', 'ASC')
                     ->get();
 
                     //return($calls);

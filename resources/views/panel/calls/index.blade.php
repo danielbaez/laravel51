@@ -47,13 +47,13 @@
 	  						if($c->normal == 1)
 	  						{
 	  							?>
-		  						<button class="btn entriesMoreClient" style="color:white;background:teal; font-size:15px" data-id="{{$c->id}}" data-email="{{$c->e}}">{{$c->cant}} <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+		  						<button class="btn entriesMoreClient" style="color:white;background:teal; font-size:15px" data-id="{{$c->id}}" data-email="{{$c->e}}">{{$c->cant}} <i class="icon-morecall fa fa-arrow-down" aria-hidden="true"></i></button>
 		  					<?php
 	  						}
 	  						else
 	  						{
 	  							?>
-		  						<button class="btn entriesMoreClientRepCot" style="color:white;background:teal; font-size:15px" data-id="{{$c->call_id}}" data-idt="{{$c->id}}" data-email="{{$c->e}}">{{$c->cant}} <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+		  						<button class="btn entriesMoreClientRepCot" style="color:white;background:teal; font-size:15px" data-id="{{$c->call_id}}" data-idt="{{$c->id}}" data-email="{{$c->e}}">{{$c->cant}} <i class="icon-morecall fa fa-arrow-down" aria-hidden="true"></i></button>
 		  					<?php
 	  						}
 	  					

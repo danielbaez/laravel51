@@ -65,7 +65,7 @@ class DetailOperation extends Model
 		{
 			$idt = $data['id'];
 		}
-		DB::update("UPDATE compare_pe.detail_operation SET state = 1 WHERE call_id = '".$data['call_id']."'");
+		DB::update("UPDATE compare_pe.detail_operation SET state = 0 WHERE call_id = '".$data['call_id']."'");
 		//acatualizar todos los call_id = $data['call_id'] con state = 1 y leugo insertar
 		$insert = new DetailOperation;
 		$insert->call_id = $data['call_id'];
@@ -76,6 +76,7 @@ class DetailOperation extends Model
 		$insert->updated = time();
 		$insert->product_id = 0;
 		$insert->last = $idt;
+		$insert->state = 1;
 
 		switch ($data['operation_id']) {
 			

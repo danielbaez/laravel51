@@ -187,7 +187,7 @@ $( document ).ready(function() {
     if(other != id){
       $("tr[data-idParent='"+other+"']").remove();
       $("tr.showMoreEntriesClient").css('border-left','none');
-      $("tr.showMoreEntriesClient").find('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+      $("tr.showMoreEntriesClient").find('i.icon-morecall').removeClass('fa-arrow-up').addClass('fa-arrow-down');
       $("tr.showMoreEntriesClient").removeClass('showMoreEntriesClient');
     }
     if(inst.find('i').hasClass('fa-arrow-down')){
@@ -239,7 +239,7 @@ $( document ).ready(function() {
     else{
       $("tr[data-idParent='"+id+"']").remove();
       inst.closest("tr").css('border-left','none');
-      inst.find('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+      inst.find('i.icon-morecall').removeClass('fa-arrow-up').addClass('fa-arrow-down');
       inst.closest("tr").removeClass('showMoreEntriesClient');
     }
   });
@@ -253,10 +253,9 @@ $( document ).ready(function() {
     var otherp = $("tr.showMoreEntriesClient").data('id');
     var other = $("tr.showMoreEntriesClient").data('idcall');
     if(other != idt){
-      
       $("tr[data-idParent='"+otherp+"']").remove();
       $("tr.showMoreEntriesClient").css('border-left','none');
-      $("tr.showMoreEntriesClient").find('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+      $("tr.showMoreEntriesClient").find('i.icon-morecall').removeClass('fa-arrow-up').addClass('fa-arrow-down');
       $("tr.showMoreEntriesClient").removeClass('showMoreEntriesClient');
     }
     if(inst.find('i').hasClass('fa-arrow-down')){
@@ -312,10 +311,9 @@ $( document ).ready(function() {
       })
     }
     else{
-      
       $("tr[data-idParent='"+id+"']").remove();
       inst.closest("tr").css('border-left','none');
-      inst.find('i').removeClass('fa-arrow-up').addClass('fa-arrow-down');
+      inst.find('i.icon-morecall').removeClass('fa-arrow-up').addClass('fa-arrow-down');
       inst.closest("tr").removeClass('showMoreEntriesClient');
     }
   });
@@ -401,7 +399,7 @@ $( document ).ready(function() {
           } 
           var moreCalls = '';
           if(result[i].cant > 1){
-            moreCalls = '<button class="btn entriesMoreClient" style="color:white;background:teal; font-size:15px" data-id='+result[i].id+' data-email="'+result[i].e+'">'+result[i].cant+' <i class="fa fa-arrow-down" aria-hidden="true"></i></button>';
+            moreCalls = '<button class="btn entriesMoreClient" style="color:white;background:teal; font-size:15px" data-id='+result[i].id+' data-email="'+result[i].e+'">'+result[i].cant+' <i class="icon-morecall fa fa-arrow-down" aria-hidden="true"></i></button>';
           }
 
           var counterCalls = '<p class="counterCall" style="margin-top: 7px;">';
