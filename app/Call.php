@@ -489,20 +489,38 @@ class Call extends Model
         return $calls;
 	}
 
-	public static function searchCall($search)
+	public static function searchCall($search, $t)
 	{
 		$country = \Session::get('country');
 		$agente = Auth::user()->id;
 
 		if($country == 'pe')
 		{
-			$table = 'compare_pe.LOG_CALLS';
-			$tableCant = 'compare_pe.email_cantidad';
+			if($t == 'calls')
+			{
+				$table = 'compare_pe.LOG_CALLS';
+				$tableCant = 'compare_pe.email_cantidad';	
+			}
+			if($t == 'repcot')
+			{
+				$table = 'compare_pe.DETAIL_OPERATION';
+				$tableCant = 'compare_pe.LOG_CALLS';	
+			}
+			
 		}
 		if($country == 'mx')
 		{
-			$table = 'compare_mx.LOG_CALLS';
-			$tableCant = 'compare_mx.email_cantidad';
+			if($t == 'calls')
+			{
+				$table = 'compare_mx.LOG_CALLS';
+				$tableCant = 'compare_mx.email_cantidad';
+			}
+			if($t == 'repcot')
+			{
+				$table = 'compare_mx.DETAIL_OPERATION';
+				$tableCant = 'compare_mx.LOG_CALLS';	
+			}
+			
 		}
 
 		$time = time();
@@ -516,25 +534,25 @@ class Call extends Model
 		array_push($user_inactive, $agente);
 		$agentes = implode("','",$user_inactive);
 
-		$a = DB::select("SELECT MAX(id) as max FROM $table WHERE time <= $time AND e <> '' AND usuario IN('".$agentes."', '') GROUP BY e");
+		if($t == 'calls')
+		{
+			$a = DB::select("SELECT MAX(id) as max FROM $table WHERE time <= $time AND e <> '' AND usuario IN('".$agentes."', '') GROUP BY e");
+		}
+
+		if($t == 'repcot')
+		{
+			$a = DB::select("SELECT MAX(id) as max FROM $table WHERE time <= $time AND operation_id IN (4,5) AND state = 1 AND agent_id IN('".$agentes."', '') GROUP BY call_id");	
+		}
 		$c= array();
 		foreach ($a as $key => $value) {
 			array_push($c, $value->max);
 			# code...
 		}
 
-		/*$calls = DB::table($table.' AS a')
-                    ->select(DB::raw('a.*, b.cant'))
-                    ->join($tableCant.' AS b', 'a.e', '=', 'b.e')
-                    ->WhereIn('a.id', $c)
-                    ->Where('a.request','<>', '')
-                    ->Where('a.e', 'like', '%'.$search.'%')
-                    ->orWhere('a.name', 'like', '%'.$search.'%')
-                    ->orderBy('a.id', 'DESC')
-                    ->paginate(10);*/
-
-        $calls = DB::table($table.' AS a')
-                    ->select(DB::raw('a.*, b.cant, (CASE WHEN (a.usuario = "") THEN "" ELSE c.name END) as agente, (CASE WHEN (d.count is NULL) THEN "" ELSE d.count END) as countCall'))
+		if($t == 'calls')
+		{
+        	$calls = DB::table($table.' AS a')
+                    ->select(DB::raw('a.*, b.cant, (CASE WHEN (a.usuario = "") THEN "" ELSE c.name END) as agente, (CASE WHEN (d.count is NULL) THEN "" ELSE d.count END) as countCall,1 as normal'))
                     ->join($tableCant.' AS b', 'a.e', '=', 'b.e')
                     ->leftJoin('panel.users AS c', 'a.usuario', '=', 'c.id')
                     ->leftJoin('compare_pe.view_detail_calls AS d', 'a.id', '=', 'd.call_id')
@@ -545,8 +563,26 @@ class Call extends Model
 		                $query->Where('a.e', 'like', '%'.$search.'%')
 		                      ->orWhere('a.name', 'like', '%'.$search.'%');
 		            })
+                    ->orderBy('b.id', 'DESC')
+                    ->paginate(10);
+		}
+		if($t == 'repcot')
+		{
+        	$calls = DB::table($table.' AS a')
+                    ->select(DB::raw('a.id, a.call_id, a.operation_id, a.product_id, a.quotation, a.motive_id, a.comment, a.time, b.e, b.request, b.requestMultiple, b.t, b.name, b.phone, b.prima, b.company, f.cant, c.name as agente, (CASE WHEN (d.count is NULL) THEN "" ELSE d.count END) as countCall, 0 as normal'))
+                    ->join($tableCant.' AS b', 'a.call_id', '=', 'b.id')
+                    ->leftJoin('compare_pe.view_detail_operation AS f', 'a.call_id', '=', 'f.call_id')
+                    ->leftJoin('panel.users AS c', 'a.agent_id', '=', 'c.id')
+                    ->leftJoin('compare_pe.view_detail_calls_operation AS d', 'a.id', '=', 'd.call_id')
+                    ->WhereIn('a.id', $c)
+                    ->where(function($query) use ($search)
+		            {
+		                $query->Where('b.e', 'like', '%'.$search.'%')
+		                      ->orWhere('b.name', 'like', '%'.$search.'%');
+		            })
                     ->orderBy('a.id', 'DESC')
                     ->paginate(10);
+		}
 
 		foreach ($calls as $id => $c)
 		{

@@ -1,7 +1,19 @@
 @extends('panel.template')
+<div style="display:none">{{ date_default_timezone_set('America/Lima') }}</div>
+
+@section('alerts')
+	@foreach($alerts as $al)
+		<li>
+	        <a href="#" class="text-center">{{ date('d-m-Y h:i A', $al->time) }}</a>
+	    </li>    
+    @endforeach
+    <li class="divider"></li>
+    <li>
+        <a href="#">Ver Todas</a>
+    </li>
+@stop
 
 @section('content')
-	<div style="display:none">{{ date_default_timezone_set('America/Lima') }}</div>
 	@include('partials.messages')
 	<div class="row">
 		<div class="alert alert-info alert-dismissible text-center" id="msgOperationSuccessDiv" role="alert" style="display:none">
@@ -19,20 +31,20 @@
 
 		<h4>Calls Comparison</h4>
 		<br>
-		<div class="col hidden-xs col-sm-3 text-center">
+		<!-- <div class="col hidden-xs col-sm-3 text-center">
 			<p style="padding-top:6px"><strong>Busqueda por Nombre o email:</strong></p>
+		</div> -->
+		<div class="col col-xs-8 col-xs-offset-0 col-sm-6 col-sm-offset-2 col-md-offset-2 text-center">
+			<input class="form-control" type="text" name="search" placeholder="Busqueda por nombre o email">
 		</div>
-		<div class="col col-xs-8 col-sm-6 text-center">
-			<input class="form-control" type="text" name="search" placeholder="Ingrese nombre o email">
-		</div>
-		<div class="col col-xs-4 col-sm-3 text-center">
+		<div class="col col-xs-4 col-md-2 text-center">
 			<button class="btn btn-primary  btn-search">Buscar</button>
 		</div>
 	</div>
 	<br><br>
 
 	<div class="table-responsive table-calls">
-	  <table class="table table-striped table-hover">
+	  <table class="table table-striped table-hover" {{ (Request::is('admin/repcot') ? 'data-table=repcot' : 'data-table=calls') }}>
 	  	<thead>
 	  	  <tr><th class="text-center">ID</th><th class="text-center">Name / Email</th><th class="text-center">Fecha</th><th class="text-center">Celular</th><th class="text-center">Solicitar</th><th class="text-center">Llamar</th><th class="text-center">Prima</th><th class="text-center">Compañia</th><th class="text-center">Operación</th></tr>
 	  	</thead>
@@ -203,8 +215,8 @@
 						  </div>
 						  <div class="form-group div-gps col-xs-12 col-sm-3 col-md-2">
 		          	<label for="comentario">GPS</label><br>
-						    <label class="radio-inline"><input type="radio" checked name="gps">Si</label>
-								<label class="radio-inline"><input type="radio" name="gps">No</label>
+						    <label class="radio-inline"><input type="radio" checked name="gps" value="si">Si</label>
+								<label class="radio-inline"><input type="radio" name="gps" value="no">No</label>
 		          </div>
 		          <div class="form-group div-email col-xs-12 col-sm-6 col-md-7">
 		          	<label for="email">Email</label><br>

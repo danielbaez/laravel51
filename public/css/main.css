@@ -122,5 +122,5 @@ input.form-control.input-tel {
 }
 
 .info-cotiz {
-  font-size:20px; margin-top:5px;cursor:pointer !important
+  font-size:20px; margin-top:5px;cursor:pointer !important; display: block;
 }

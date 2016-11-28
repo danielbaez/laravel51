@@ -97,4 +97,10 @@ class DetailOperation extends Model
 		}
 		return $insert->save();
 	}
+
+	public static function getAlerts()
+	{
+		$alerts = DetailOperation::where('time', '>=', time()-300)->where('time', '<=', time()+300)->get();
+		return $alerts;
+	}
 }

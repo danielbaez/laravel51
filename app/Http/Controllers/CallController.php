@@ -12,6 +12,8 @@ use App\Call;
 use App\Product;
 use App\DetailOperation;
 
+use Twilio;
+
 class CallController extends Controller
 {
     public function index(Request $request)
@@ -19,7 +21,7 @@ class CallController extends Controller
         if($request->get('action') == 'searchCall')
         {
             //dd($request->get('action'));
-            $calls = Call::searchCall($request->get('search'));
+            $calls = Call::searchCall($request->get('search'), $request->get('t'));
             if($calls)
             {
                 if ($request->ajax()) {
@@ -46,6 +48,7 @@ class CallController extends Controller
 
     public function repcot(Request $request)
     {
+        //Twilio::message('+51968820382', 'text example3');
         if($request->get('action') == 'searchCall')
         {
             //dd($request->get('action'));
@@ -70,7 +73,8 @@ class CallController extends Controller
             
             $calls = Call::getRepCot();
             $products = Product::getProducts();
-            return view('panel.calls.index', compact('calls', 'products'));
+            $alerts = DetailOperation::getAlerts();
+            return view('panel.calls.index', compact('calls', 'products', 'alerts'));
         }
     }
 
@@ -120,7 +124,7 @@ class CallController extends Controller
                         Call::updateLogCall($dataLog);
                     }
                     $product_id = $request->get('producto');
-                    $gps = $request->get('gps') == 'on' ? 'si' : 'no';
+                    $gps = $request->get('gps');
                     $valor = $request->get('valor');
                     $prima = $request->get('prima');
                     $cuota = $request->get('cuota');

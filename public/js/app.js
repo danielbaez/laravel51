@@ -1,5 +1,55 @@
 $( document ).ready(function() {
 
+  // Set up with TOKEN, a string generated server-side
+  Twilio.Device.setup("{TOKEN}");
+
+  Twilio.Device.ready(function() {
+      // Could be called multiple times if network drops and comes back.
+      // When the TOKEN allows incoming connections, this is called when
+      // the incoming channel is open.
+  });
+
+  Twilio.Device.offline(function() {
+      // Called on network connection lost.
+  });
+
+  Twilio.Device.incoming(function(conn) {
+      console.log(conn.parameters.From); // who is calling
+      conn.status // => "pending"
+      conn.accept();
+      conn.status // => "connecting"
+  });
+
+  Twilio.Device.cancel(function(conn) {
+      console.log(conn.parameters.From); // who canceled the call
+      conn.status // => "closed"
+  });
+
+  Twilio.Device.connect(function (conn) {
+      // Called for all new connections
+      console.log(conn.status);
+  });
+
+  Twilio.Device.disconnect(function (conn) {
+      // Called for all disconnections
+      console.log(conn.status);
+  });
+
+  Twilio.Device.error(function (e) {
+      console.log(e.message + " for " + e.connection);
+  });
+
+  $(document).ready(function () {
+      Twilio.Device.connect({
+          agent: "Smith",
+          phone_number: "4158675309"
+      });
+  });
+
+  $("#hangup").click(function() {
+      Twilio.Device.disconnectAll();
+  });
+
   function timeConverter(UNIX_timestamp){
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -367,9 +417,10 @@ $( document ).ready(function() {
   $('.btn-search').on('click', function() {
     var search = $('input[name="search"]').val();
     //var url = 'calls/ajax';
+    var t = $('table').data('table');
     var url = 'calls';
     $.ajax({
-      data: {search: search, action:'searchCall'},
+      data: {search: search, t: t, action:'searchCall'},
       type: "GET",
       dataType: "json",
       url: url,
@@ -399,7 +450,20 @@ $( document ).ready(function() {
           } 
           var moreCalls = '';
           if(result[i].cant > 1){
-            moreCalls = '<button class="btn entriesMoreClient" style="color:white;background:teal; font-size:15px" data-id='+result[i].id+' data-email="'+result[i].e+'">'+result[i].cant+' <i class="icon-morecall fa fa-arrow-down" aria-hidden="true"></i></button>';
+            var cl = '';
+            if(t == 'calls'){
+              cl = 'entriesMoreClient';
+              moreCalls = '<button class="btn '+cl+'" style="color:white;background:teal; font-size:15px" data-id='+result[i].id+' data-email="'+result[i].e+'">'+result[i].cant+' <i class="icon-morecall fa fa-arrow-down" aria-hidden="true"></i></button>';
+            }
+            if(t == 'repcot'){
+              cl = 'entriesMoreClientRepCot';
+              moreCalls = '<button class="btn '+cl+'" style="color:white;background:teal; font-size:15px" data-id='+result[i].call_id+' data-idt='+result[i].id+' data-email="'+result[i].e+'">'+result[i].cant+' <i class="icon-morecall fa fa-arrow-down" aria-hidden="true"></i></button>';
+            }            
+          }
+
+          var iconcot = '';
+          if(result[i].normal == 0 && result[i].operation_id == 4){
+            iconcot = '<i class="fa fa-database info-cotiz" aria-hidden="true" data-id='+result[i].id+'></i>';
           }
 
           var counterCalls = '<p class="counterCall" style="margin-top: 7px;">';
@@ -408,7 +472,9 @@ $( document ).ready(function() {
           }
           counterCalls+='</p>';
 
-          html = "<tr data-idcall="+result[i].id+"><td class='text-center'><p class='table-colum-id'>"+result[i].id+"</p>"+moreCalls+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+result[i].time+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn btn-success btn-calling'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
+          var xx = result[i].normal == 0 ? 'data-id='+result[i].call_id+' data-table=repcot' : 'data-table=calls';
+
+          html = "<tr data-idcall="+result[i].id+" "+xx+" data-email="+result[i].e+"><td class='text-center'><p class='table-colum-id'>"+result[i].id+"</p>"+moreCalls+iconcot+"</td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+result[i].time+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn btn-success btn-calling'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
 
           $('.table-calls-search tbody:last-child').append(html);
         }  
@@ -459,6 +525,12 @@ $( document ).ready(function() {
       
       $('.body-detail-call').html(body);
     });
+  });
+
+  
+
+  $(document).on('click', '.alerts-custom', function() {
+    
   });
 
 });
