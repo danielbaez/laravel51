@@ -1,55 +1,5 @@
 $( document ).ready(function() {
 
-  // Set up with TOKEN, a string generated server-side
-  Twilio.Device.setup("{TOKEN}");
-
-  Twilio.Device.ready(function() {
-      // Could be called multiple times if network drops and comes back.
-      // When the TOKEN allows incoming connections, this is called when
-      // the incoming channel is open.
-  });
-
-  Twilio.Device.offline(function() {
-      // Called on network connection lost.
-  });
-
-  Twilio.Device.incoming(function(conn) {
-      console.log(conn.parameters.From); // who is calling
-      conn.status // => "pending"
-      conn.accept();
-      conn.status // => "connecting"
-  });
-
-  Twilio.Device.cancel(function(conn) {
-      console.log(conn.parameters.From); // who canceled the call
-      conn.status // => "closed"
-  });
-
-  Twilio.Device.connect(function (conn) {
-      // Called for all new connections
-      console.log(conn.status);
-  });
-
-  Twilio.Device.disconnect(function (conn) {
-      // Called for all disconnections
-      console.log(conn.status);
-  });
-
-  Twilio.Device.error(function (e) {
-      console.log(e.message + " for " + e.connection);
-  });
-
-  $(document).ready(function () {
-      Twilio.Device.connect({
-          agent: "Smith",
-          phone_number: "4158675309"
-      });
-  });
-
-  $("#hangup").click(function() {
-      Twilio.Device.disconnectAll();
-  });
-
   function timeConverter(UNIX_timestamp){
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -370,6 +320,7 @@ $( document ).ready(function() {
 
   $(document).on('click', '.btn-calling', function() {
     var btn = $(this);
+    var tel = btn.parent().parent().find('.input-tel').val();
     if(btn.hasClass('btn-success')){
       var t = $(this).closest("tr").data('table');
 
@@ -382,6 +333,8 @@ $( document ).ready(function() {
         url: url,
       })
       .done(function(response){
+        params = { "tocall" : tel};
+        connection = Twilio.Device.connect(params); 
         btn.removeClass('btn-success').addClass('btn-danger');
         console.log(response);
         $("tr[data-idcall="+idCall+"]").find('.counterCall').html('<span class="badge call-bagde bagde-counter-call">'+response.result.counter+'</span>');
@@ -389,6 +342,7 @@ $( document ).ready(function() {
       });
     }
     else{
+      Twilio.Device.disconnectAll();
       btn.removeClass('btn-danger').addClass('btn-success');
     }
   });
@@ -485,15 +439,15 @@ $( document ).ready(function() {
           pag += "<li class='disabled'><span>«</span></li>";
           for(var j = 1; j <= response.last_page; j++){
             if(j == 1){
-              pag += "<li class='active'><a href='?action=searchCall&search="+search+"&page="+j+"'><span>"+j+"</span></a></li>";
+              pag += "<li class='active'><a href='?action=searchCall&search="+search+"&t="+t+"&page="+j+"'><span>"+j+"</span></a></li>";
             }
             else{
-              pag += "<li><a href='?action=searchCall&search="+search+"&page="+j+"'>"+j+"</a></li>";
+              pag += "<li><a href='?action=searchCall&search="+search+"&t="+t+"&page="+j+"'>"+j+"</a></li>";
             }
             
           }
 
-          pag += "<li><a href='?action=searchCall&search="+search+"&page=2' rel='next'>»</a></li>";
+          pag += "<li><a href='?action=searchCall&search="+search+"&t="+t+"&page=2' rel='next'>»</a></li>";
           
 
           pag +='</ul></div>';

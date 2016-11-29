@@ -2,6 +2,7 @@
 <div style="display:none">{{ date_default_timezone_set('America/Lima') }}</div>
 
 @section('alerts')
+	@if(isset($alerts))
 	@foreach($alerts as $al)
 		<li>
 	        <a href="#" class="text-center">{{ date('d-m-Y h:i A', $al->time) }}</a>
@@ -11,6 +12,7 @@
     <li>
         <a href="#">Ver Todas</a>
     </li>
+    @endif
 @stop
 
 @section('content')
@@ -29,7 +31,7 @@
 			<h4><strong><i class="fa fa-info-circle"></i></strong> <span id="msgOperationError"></span></h4>
 		</div>
 
-		<h4>Calls Comparison</h4>
+		<h4 id="status-call">Calls Comparison</h4>
 		<br>
 		<!-- <div class="col hidden-xs col-sm-3 text-center">
 			<p style="padding-top:6px"><strong>Busqueda por Nombre o email:</strong></p>
@@ -292,5 +294,73 @@
 	</div>
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+@stop
+
+@section('leyenda')
+	<hr style="margin:0;border:2px solid;">
+	<div style="display: inline-block; width: 100%; color:white">
+		<h4 style="padding:0px 10px;margin-bottom: 7px;">Leyenda</h4>
+		<ul style="padding:10px">
+	    	<li style="list-style:none;padding-bottom:5px">
+	    		<img src="{{ asset('images/sinaccion.png') }}" style="height: 25px;width: 25px; margin-right:10px">Reentrada 
+	    	</li>
+	    	<li style="list-style:none;padding-bottom:5px">
+	    		<img src="{{ asset('images/cotizacion.png') }}" style="height: 25px;width: 25px; margin-right:10px">Cotizacion 
+	    	</li>
+	    	<li style="list-style:none;padding-bottom:5px">
+	    		<img src="{{ asset('images/redir.png') }}" style="height: 25px;width: 25px; margin-right:10px">Redirigido 
+	    	</li>
+	    	<li style="list-style:none;padding-bottom:5px">
+	    		<img src="{{ asset('images/reprogramado.png') }}" style="height: 25px;width: 25px; margin-right:10px">Reprogranado 
+	    	</li>
+	    	<li style="list-style:none;padding-bottom:5px">
+	    		<img src="{{ asset('images/lead.png') }}" style="height: 25px;width: 25px; margin-right:10px">Lead 
+	    	</li>
+	    	<li style="list-style:none;padding-bottom:5px">
+	    		<img src="{{ asset('images/transferir.png') }}" style="height: 25px;width: 25px; margin-right:10px">Transferido 
+	    	</li>
+	    	<li style="list-style:none;padding-bottom:5px">
+	    		<img src="{{ asset('images/clicktocall.png') }}" style="height: 25px;width: 25px; margin-right:10px">LLamanos 
+	    	</li>
+    	</ul>
+	</div>
+@stop
+
+@section('js')
+
+<script type="text/javascript">
+
+  // Set up with TOKEN, a string generated server-side
+  Twilio.Device.setup("{{$token}}");
+
+  Twilio.Device.ready(function() {
+	$('#status-call').text('Ready to start call');
+      // Could be called multiple times if network drops and comes back.
+      // When the TOKEN allows incoming connections, this is called when
+      // the incoming channel is open.
+  });
+
+  Twilio.Device.offline(function() {
+      // Called on network connection lost.
+      $('#status-call').text('Offline');
+  });
+
+  Twilio.Device.connect(function (conn) {
+      // Called for all new connections
+      console.log(conn.status);
+      $('#status-call').text("Successfully established call");
+  });
+
+  Twilio.Device.disconnect(function (conn) {
+      // Called for all disconnections
+      console.log(conn.status);
+      $('#status-call').text("Call ended");
+  });
+
+  Twilio.Device.error(function (e) {
+      console.log(e.message + " for " + e.connection);
+  });
+</script>
 
 @stop

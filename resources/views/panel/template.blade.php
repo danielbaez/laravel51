@@ -188,6 +188,8 @@
                     <li>
                         <a href="index-rtl.html"><i class="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
                     </li> -->
+                    @section('leyenda')
+                    @show
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -331,7 +333,7 @@
     <!-- jQuery -->
     <script src="{{ asset('js/jquery.js') }}"></script>
 
-    <script src="https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js"></script>
+    <script type="text/javascript" src="//media.twiliocdn.com/sdk/js/client/v1.3/twilio.min.js"></script>
 
     <!-- Moment -->
     <script src="{{ asset('js/plugins/moment/moment.min.js') }}"></script>
@@ -343,6 +345,9 @@
     <script src="{{ asset('js/plugins/datetimepicker/bootstrap-datetimepicker.min.js') }}"></script>
 
     <script src="{{ asset('js/app.js') }}"></script>
+
+    @section('js')
+    @show
     
 
 </body>

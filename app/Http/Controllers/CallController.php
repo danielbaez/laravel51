@@ -13,11 +13,32 @@ use App\Product;
 use App\DetailOperation;
 
 use Twilio;
+use Twilio\Jwt\ClientToken;
 
 class CallController extends Controller
 {
     public function index(Request $request)
     {
+        $country = \Session::get('country');
+        // put your Twilio API credentials here
+        $accountSid = env("TWILIO_SID");
+        $authToken  = env("TWILIO_TOKEN");
+        if($country == 'pe')
+        {
+            $appSid = 'APcf32e0ee31dd150fbd3d6f080cc322be';
+            $sal = 'panelpe';
+        }
+        if($country == 'mx')
+        {
+            $appSid = 'AP424f6d080275bcc62854bd45636b471e';
+            $sal = 'panelmx';
+        }
+
+        $capability = new ClientToken($accountSid, $authToken);
+        $capability->allowClientOutgoing($appSid);
+        $capability->allowClientIncoming($sal);
+        $token = $capability->generateToken();
+
         if($request->get('action') == 'searchCall')
         {
             //dd($request->get('action'));
@@ -28,9 +49,9 @@ class CallController extends Controller
                     return $calls;    
                 }
 
-                $calls->setPath('')->appends(['action' => 'searchCall', 'search' => $request->get('search')])->render();
+                $calls->setPath('')->appends(['action' => 'searchCall', 'search' => $request->get('search'), 't' => $request->get('t')])->render();
                 $products = Product::getProducts();
-                return view('panel.calls.index', compact('calls', 'products'));
+                return view('panel.calls.index', compact('calls', 'products', 'token'));
             }
             else
             {
@@ -42,12 +63,32 @@ class CallController extends Controller
             
             $calls = Call::getCalls();
             $products = Product::getProducts();
-            return view('panel.calls.index', compact('calls', 'products'));
+            return view('panel.calls.index', compact('calls', 'products', 'token'));
         }
     }
 
     public function repcot(Request $request)
     {
+        $country = \Session::get('country');
+        // put your Twilio API credentials here
+        $accountSid = env("TWILIO_SID");
+        $authToken  = env("TWILIO_TOKEN");
+        if($country == 'pe')
+        {
+            $appSid = 'APcf32e0ee31dd150fbd3d6f080cc322be';
+            $sal = 'panelpe';
+        }
+        if($country == 'mx')
+        {
+            $appSid = 'AP424f6d080275bcc62854bd45636b471e';
+            $sal = 'panelmx';
+        }
+
+        $capability = new ClientToken($accountSid, $authToken);
+        $capability->allowClientOutgoing($appSid);
+        $capability->allowClientIncoming($sal);
+        $token = $capability->generateToken();
+        
         //Twilio::message('+51968820382', 'text example3');
         if($request->get('action') == 'searchCall')
         {
@@ -59,9 +100,9 @@ class CallController extends Controller
                     return $calls;    
                 }
 
-                $calls->setPath('')->appends(['action' => 'searchCall', 'search' => $request->get('search')])->render();
+                $calls->setPath('')->appends(['action' => 'searchCall', 'search' => $request->get('search'), 't' => $request->get('t')])->render();
                 $products = Product::getProducts();
-                return view('panel.calls.index', compact('calls', 'products'));
+                return view('panel.calls.index', compact('calls', 'products', 'token'));
             }
             else
             {
@@ -74,7 +115,7 @@ class CallController extends Controller
             $calls = Call::getRepCot();
             $products = Product::getProducts();
             $alerts = DetailOperation::getAlerts();
-            return view('panel.calls.index', compact('calls', 'products', 'alerts'));
+            return view('panel.calls.index', compact('calls', 'products', 'alerts', 'token'));
         }
     }
 
