@@ -76,6 +76,8 @@ class Authenticate
         }
         if($this->auth->user()->type == 2){
             \Session::push('menu', (object)array('title'=>'Dashboard', 'route'=>'home', 'path' => 'admin', 'icon'=>'fa-dashboard'));
+            \Session::push('menu', (object)array('title'=>'Llamadas','route'=>'calls', 'path' => 'admin/calls', 'icon'=>'fa-phone'));
+            \Session::push('menu', (object)array('title'=>'Reprogramaciones y Cotizaciones','route'=>'repcot', 'path' => 'admin/repcot', 'icon'=>'fa-phone'));
         }
 
         return $next($request);

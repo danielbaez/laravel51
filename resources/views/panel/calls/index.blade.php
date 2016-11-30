@@ -80,7 +80,24 @@
 	  					}
 	  					?>
 	  				</td>
-	  				<td>{{ $c->name }}<br>{{ $c->e }}</td>
+	  				<td>{{ $c->name }}<br>{{ $c->e }}<br>
+	  					<?php
+		  					if($c->usuario != '' && $c->state == 0)
+		  					{
+	  					?>
+	  						<img style="height: 25px;width: 25px;" src="{{asset('images/sinaccion.png')}}">
+	  					<?php
+	  						}
+	  					?>
+	  					<?php
+		  					if($c->usuario != '' && $c->usuario != Auth::user()->id && $c->state == 0)
+		  					{
+	  					?>
+	  						<img style="height: 25px;width: 25px;" src="{{asset('images/redir.png')}}">
+	  					<?php
+	  						}
+	  					?>
+	  				</td>
 	  				<td>{{ date('d-m-Y h:i A', $c->time) }}</td>
 	  				<td><input class="form-control input-tel" type="input" value="{{ $c->phone }}"></td>
 	  				<td class="text-center">

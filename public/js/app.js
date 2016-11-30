@@ -225,7 +225,12 @@ $( document ).ready(function() {
             }
             counterCalls+='</p>';
 
-            html = "<tr style='border-left: 12px solid dodgerblue;' data-idcall="+result[i].id+" data-idParent="+id+" data-table='calls'><td class='text-center'><p class='table-colum-id'>"+result[i].id+"</p></td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+timeConverter(result[i].time)+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar disabled'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
+            var agentStatus = '<span class="badge call-bagde" style="white-space: normal;background-color:dodgerblue">'+result[i].agente+'</span>';
+            if(result[i].agente == ''){
+              agentStatus = '<span class="badge call-bagde" style="white-space: normal;background-color:dodgerblue">Libre</span>';
+            }
+
+            html = "<tr style='border-left: 12px solid dodgerblue;' data-idcall="+result[i].id+" data-idParent="+id+" data-table='calls'><td class='text-center'><p class='table-colum-id'>"+result[i].id+"</p></td><td>"+result[i].name+"<br>"+result[i].e+"</td><td>"+timeConverter(result[i].time)+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'>"+agentStatus+"</td></tr>";
 
             inst.closest("tr").after(html);
             inst.closest("tr").css('border-left','20px solid green');
