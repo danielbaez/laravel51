@@ -82,7 +82,7 @@ class Call extends Model
                     ->leftJoin('panel.users AS c', 'a.usuario', '=', 'c.id')
                     ->leftJoin('compare_pe.view_detail_calls AS d', 'a.id', '=', 'd.call_id')
                     ->WhereIn('a.id', $c)
-                    ->Where('a.request','<>', '')
+                    //->Where('a.request','<>', '')
                     ->orderBy('a.id', 'DESC')
                     ->paginate(10);
 
@@ -557,7 +557,7 @@ class Call extends Model
                     ->leftJoin('panel.users AS c', 'a.usuario', '=', 'c.id')
                     ->leftJoin('compare_pe.view_detail_calls AS d', 'a.id', '=', 'd.call_id')
                     ->WhereIn('a.id', $c)
-                    ->Where('a.request','<>', '')
+                    //->Where('a.request','<>', '')
                     ->where(function($query) use ($search)
 		            {
 		                $query->Where('a.e', 'like', '%'.$search.'%')

@@ -17,6 +17,7 @@
 
 @section('content')
 	@include('partials.messages')
+	<input type="hidden" name="idUser" id="idUser" value="{{Auth::user()->id}}">
 	<div class="row">
 		<div class="alert alert-info alert-dismissible text-center" id="msgOperationSuccessDiv" role="alert" style="display:none">
 			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -82,18 +83,50 @@
 	  				</td>
 	  				<td>{{ $c->name }}<br>{{ $c->e }}<br>
 	  					<?php
-		  					if($c->usuario != '' && $c->state == 0)
+		  					if($c->normal == 1 && $c->usuario != '' && $c->state == 0)
 		  					{
 	  					?>
-	  						<img style="height: 25px;width: 25px;" src="{{asset('images/sinaccion.png')}}">
+	  						<img style="height: 25px;width: 25px;margin-right:5px" src="{{asset('images/sinaccion.png')}}">
 	  					<?php
 	  						}
 	  					?>
 	  					<?php
-		  					if($c->usuario != '' && $c->usuario != Auth::user()->id && $c->state == 0)
+		  					if($c->normal == 1 && $c->state == 0 && $c->lead == 'si')
 		  					{
 	  					?>
-	  						<img style="height: 25px;width: 25px;" src="{{asset('images/redir.png')}}">
+	  						<img style="height: 25px;width: 25px;margin-right:5px" src="{{asset('images/lead.png')}}">
+	  					<?php
+	  						}
+	  					?>
+	  					<?php
+		  					if($c->normal == 1 && $c->state == 0 && $c->lead == 'clicktocall')
+		  					{
+	  					?>
+	  						<img style="height: 25px;width: 25px;margin-right:5px" src="{{asset('images/clicktocall.png')}}">
+	  					<?php
+	  						}
+	  					?>
+	  					<?php
+		  					if($c->normal == 1 && $c->usuario != '' && $c->usuario != Auth::user()->id && $c->state == 0)
+		  					{
+	  					?>
+	  						<img style="height: 25px;width: 25px;margin-right:5px" src="{{asset('images/redir.png')}}">
+	  					<?php
+	  						}
+	  					?>
+	  					<?php
+		  					if($c->normal == 0 && $c->operation_id == 4)
+		  					{
+	  					?>
+	  						<img style="height: 25px;width: 25px;margin-right:5px" src="{{asset('images/cotizacion.png')}}">
+	  					<?php
+	  						}
+	  					?>
+	  					<?php
+		  					if($c->normal == 0 && $c->operation_id == 5)
+		  					{
+	  					?>
+	  						<img style="height: 25px;width: 25px;margin-right:5px" src="{{asset('images/reprogramado.png')}}">
 	  					<?php
 	  						}
 	  					?>
