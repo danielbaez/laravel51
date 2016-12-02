@@ -83,18 +83,18 @@
 	  				</td>
 	  				<td>{{ $c->name }}<br>{{ $c->e }}<br>
 	  					<?php
-		  					if($c->normal == 1 && $c->usuario != '' && $c->state == 0)
+		  					if($c->cant > 1)
 		  					{
 	  					?>
 	  						<img style="height: 25px;width: 25px;margin-right:5px" src="{{asset('images/sinaccion.png')}}">
 	  					<?php
 	  						}
-	  					?>
+	  					?>	  					
 	  					<?php
-		  					if($c->normal == 1 && $c->state == 0 && $c->lead == 'si')
+		  					if($c->normal == 1 && $c->usuario != '' && $c->usuario != Auth::user()->id)
 		  					{
 	  					?>
-	  						<img style="height: 25px;width: 25px;margin-right:5px" src="{{asset('images/lead.png')}}">
+	  						<img style="height: 25px;width: 25px;margin-right:5px" src="{{asset('images/redir.png')}}">
 	  					<?php
 	  						}
 	  					?>
@@ -107,10 +107,10 @@
 	  						}
 	  					?>
 	  					<?php
-		  					if($c->normal == 1 && $c->usuario != '' && $c->usuario != Auth::user()->id && $c->state == 0)
+		  					if($c->normal == 1 && $c->state == 0 && $c->lead == 'si')
 		  					{
 	  					?>
-	  						<img style="height: 25px;width: 25px;margin-right:5px" src="{{asset('images/redir.png')}}">
+	  						<img style="height: 25px;width: 25px;margin-right:5px" src="{{asset('images/lead.png')}}">
 	  					<?php
 	  						}
 	  					?>

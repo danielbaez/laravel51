@@ -232,22 +232,21 @@ $( document ).ready(function() {
 
             var icnnns = '';
 
-            if(result[i].normal == 1 && result[i].usuario != '' && result[i].state == 0)
-            {
+            if(result.length == 1 || i > 0){
               icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/sinaccion.png">';
-            }
-            if(result[i].normal == 1 && result[i].state == 0 && result[i].lead == 'si')
-            {
-              icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/lead.png">';
-            }
-            if(result[i].normal == 1 && result[i].state == 0 && result[i].lead == 'clicktocall')
-            {
-              icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/clicktocall.png">';
-            }
-            if(result[i].normal == 1 && result[i].usuario != '' && result[i].usuario != $('#idUser').val() && result[i].state == 0)
-            {
-              icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/redir.png">';
-            }             
+              if(result[i].usuario != '' && result[i].usuario != $('#idUser').val())
+              {
+                icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/redir.png">';
+              }
+              if(result[i].state == 0 && result[i].lead == 'clicktocall')
+              {
+                icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/clicktocall.png">';
+              }
+              if(result[i].state == 0 && result[i].lead == 'si')
+              {
+                icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/lead.png">';
+              }              
+            }               
 
             html = "<tr style='border-left: 12px solid dodgerblue;' data-idcall="+result[i].id+" data-idParent="+id+" data-table='calls'><td class='text-center'><p class='table-colum-id'>"+result[i].id+"</p></td><td>"+result[i].name+"<br>"+result[i].e+"<br>"+icnnns+"</td><td>"+timeConverter(result[i].time)+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn disabled btn-success'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'>"+agentStatus+"</td></tr>";
 
@@ -454,22 +453,19 @@ $( document ).ready(function() {
 
           var icnnns = '';
 
-          if(result[i].normal == 1 && result[i].usuario != '' && result[i].state == 0)
+          icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/sinaccion.png">';
+          if(result[i].normal == 1 && result[i].usuario != '' && result[i].usuario != $('#idUser').val())
           {
-            icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/sinaccion.png">';
-          }
-          if(result[i].normal == 1 && result[i].state == 0 && result[i].lead == 'si')
-          {
-            icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/lead.png">';
+            icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/redir.png">';
           }
           if(result[i].normal == 1 && result[i].state == 0 && result[i].lead == 'clicktocall')
           {
             icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/clicktocall.png">';
-          }
-          if(result[i].normal == 1 && result[i].usuario != '' && result[i].usuario != $('#idUser').val() && result[i].state == 0)
+          }    
+          if(result[i].normal == 1 && result[i].state == 0 && result[i].lead == 'si')
           {
-            icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/redir.png">';
-          }             
+            icnnns += '<img style="height: 25px;width: 25px; margin-right:5px" src="../images/lead.png">';
+          }         
 
           html = "<tr data-idcall="+result[i].id+" "+xx+" data-email="+result[i].e+"><td class='text-center'><p class='table-colum-id'>"+result[i].id+"</p>"+moreCalls+iconcot+"</td><td>"+result[i].name+"<br>"+result[i].e+"<br>"+icnnns+"</td><td>"+result[i].time+"</td><td><input class='form-control input-tel' type='input' value='"+result[i].phone+"'></td><td class='text-center'>"+carname+"</td><td class='text-center'><button class='btn btn-success btn-calling'><i class='fa fa-phone fa-2x' aria-hidden='true'></i></button>"+counterCalls+"</td><td>"+result[i].prima+"</td><td>"+result[i].company+"</td><td class='text-center'><a class='btn btn-warning btn-actualizar'><i class='fa fa-pencil-square-o fa-2x' aria-hidden='true'></i></a></td></tr>";
 

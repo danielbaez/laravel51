@@ -118,5 +118,17 @@ class UsersTableSeeder extends Seeder
             'active' => 1,
             'method_call' => 'movil'
         ]);
+
+        DB::table('users')->insert([
+            'name' => 'Andrea Ramirez',
+            'email' => 'andrea.ramirez@comparabien.com',
+            'password' => Hash::make(12345678),
+            'type' => 2,
+            'company_id' => 0,
+            'country' => 'pe',
+            'phone_pe' => '999999999',
+            'active' => 1,
+            'method_call' => 'movil'
+        ]);
     }
 }
